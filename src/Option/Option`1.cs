@@ -4,17 +4,12 @@
 
 namespace Option
 {
-    public interface IOption : IEquatable<IOption>
-    {
-        bool IsNone();
-        bool IsSome();
-
-        Type GetUnderlyingType();
-    }
-
     public abstract class Option<T> : IOption, IEquatable<Option<T>>
     {
         protected internal Option() { }
+
+        public static explicit operator T(Option<T> option) => option.Unwrap();
+        public static implicit operator Option<T>(T value) => Option.Some(value);
 
         public virtual Type GetUnderlyingType() => typeof(T);
 
@@ -105,9 +100,13 @@ namespace Option
                 return Unwrap().GetHashCode();
             }
 
-            var type = GetUnderlyingType();
-            var typeHc = type.GetHashCode();
+            Type type = GetUnderlyingType();
+            int typeHc = type.GetHashCode();
             return unchecked(((typeHc * 17) >> 1) * 31);
         }
+
+        public abstract Option<(T,U)> Zip<U>(Option<U> other);
+
+        public abstract Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func);
     }
 }

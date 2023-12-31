@@ -41,5 +41,15 @@ namespace Option
         public override Option<T> OrElse(Func<Option<T>> optionBFactory) => optionBFactory();
 
         public override Option<T> XOr(Option<T> optionB) => optionB;
+
+        public override Option<(T, U)> Zip<U>(Option<U> other)
+        {
+            return Option.None<(T, U)>();
+        }
+
+        public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func)
+        {
+            return Option.None<R>();
+        }
     }
 }

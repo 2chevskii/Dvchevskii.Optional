@@ -54,5 +54,11 @@ namespace Option
 
         public override Option<T> XOr(Option<T> optionB) =>
             optionB.IsSome() ? Option.None<T>() : this;
+
+        public override Option<(T, U)> Zip<U>(Option<U> other) =>
+            other.IsNone() ? Option.None<(T, U)>() : Option.Some((Unwrap(), other.Unwrap()));
+
+        public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func) =>
+            other.IsNone() ? Option.None<R>() : Option.Some(func(Unwrap(), other.Unwrap()));
     }
 }
