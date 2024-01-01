@@ -59,7 +59,7 @@ public class NoneTests
         TestSubject
             .Invoking(s => s.Expect(msg))
             .Should()
-            .Throw<NoneOptionException>()
+            .Throw<ExpectNoneException>()
             .And.Message.Should()
             .Be(msg);
     }
@@ -70,7 +70,7 @@ public class NoneTests
         TestSubject
             .Invoking(s => s.Unwrap())
             .Should()
-            .Throw<NoneOptionException>()
+            .Throw<ExpectNoneException>()
             .And.Message.Should()
             .Be("Option is none");
     }

@@ -13,7 +13,7 @@ namespace Option
 
         public override Option<T> Inspect(Action<T> inspector) => this;
 
-        public override T Expect(string message) => throw new NoneOptionException(message);
+        public override T Expect(string message) => throw new ExpectNoneException(message);
 
         public override T Unwrap() => Expect("Option is none");
 
