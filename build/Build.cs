@@ -1,5 +1,8 @@
 using Nuke.Common;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
+using Nuke.Utilities.Text.Yaml;
+using Serilog;
 
 class Build : NukeBuild
 {
@@ -10,11 +13,23 @@ class Build : NukeBuild
         ? Configuration.Debug
         : Configuration.Release;
 
-    Target Clean => _ => _.Before(Restore).Executes(() => { });
+    [GitVersion]
+    readonly GitVersion Version;
 
-    Target Restore => _ => _.Executes(() => { });
+    Target ShowVersion =>
+        _ => _.Executes(() => Log.Information("Version:\n{Version}", Version.ToYaml()));
 
-    Target Compile => _ => _.DependsOn(Restore).Executes(() => { });
+    Target Clean =>
+        _ =>
+            _.Before(Restore)
+                .Executes(() => DotNetTasks.DotNetClean(c => c.SetConfiguration(Configuration)));
+
+    Target Restore => _ => _.Executes(() => DotNetTasks.DotNetRestore());
+
+    Target Compile =>
+        _ =>
+            _.DependsOn(Restore)
+                .Executes(() => DotNetTasks.DotNetBuild(c => c.SetConfiguration(Configuration)));
 
     Target UnitTest =>
         _ =>
@@ -23,8 +38,12 @@ class Build : NukeBuild
                     () =>
                         DotNetTasks.DotNetTest(
                             c =>
-                                c.EnableNoBuild()
-                                    .AddLoggers("console;verbosity=detailed", "html;logfilename=testResults.html")
+                                c.SetConfiguration(Configuration)
+                                    .EnableNoBuild()
+                                    .AddLoggers(
+                                        "console;verbosity=detailed",
+                                        "html;logfilename=testResults.html"
+                                    )
                         )
                 );
 }

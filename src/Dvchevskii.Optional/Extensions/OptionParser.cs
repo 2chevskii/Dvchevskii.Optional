@@ -1,6 +1,8 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Globalization;
+using System.Numerics;
 
-namespace Option.Extensions
+namespace Dvchevskii.Optional.Extensions
 {
     public class OptionParser
     {
@@ -104,16 +106,15 @@ namespace Option.Extensions
             return Option.Some(value);
         }
 
-        public static Option<decimal> ParseDecimal(string input)
+        /*public static Option<decimal> ParseDecimal(
+            string input,
+            NumberStyles numberStyles,
+            IFormatProvider formatProvider
+        )
         {
-            if (!decimal.TryParse(input, out var value))
-            {
-                return Option.None<decimal>();
-            }
+            return Option.Create<decimal>(decimal.TryParse, input, numberStyles, formatProvider);
+        }*/
 
-            return Option.Some(value);
-        }
-
-
+        public static Option<decimal> ParseDecimal(string input) => Option.Create<decimal>(decimal.TryParse, input);
     }
 }

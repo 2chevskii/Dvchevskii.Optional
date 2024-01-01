@@ -1,33 +1,30 @@
 ﻿using System;
-using Option.Exceptions;
+using Dvchevskii.Optional.Exceptions;
 
-// ReSharper disable InconsistentNaming
-
-namespace Option
+namespace Dvchevskii.Optional
 {
-    public abstract class Option<T> : IOption, IEquatable<Option<T>>
+    public abstract class Option<T> : Optional.Option, IEquatable<T>
     {
         protected internal Option() { }
 
         public static explicit operator T(Option<T> option) => option.Unwrap();
-        public static implicit operator Option<T>(T value) => Option.Some(value);
 
-        public virtual Type GetUnderlyingType() => typeof(T);
+        public static implicit operator Option<T>(T value) => Some(value);
 
-        public abstract bool IsNone();
-        public abstract bool IsSome();
         /// <summary>
         /// Check if <see cref="Option{T}"/> contains a value and it matches the <paramref name="predicate"/>
         /// </summary>
         /// <param name="predicate">A predicate to match</param>
         /// <returns></returns>
         public abstract bool IsSomeAnd(Predicate<T> predicate);
+
         /// <summary>
         /// Runs a given function on a value if option is Some
         /// </summary>
         /// <param name="inspector">Function to run on a value</param>
         /// <returns></returns>
         public abstract Option<T> Inspect(Action<T> inspector);
+
         /// <summary>
         /// Unwraps a value if option is Some, or throws a <see cref="ExpectNoneException"/> with given message
         /// </summary>
@@ -55,9 +52,9 @@ namespace Option
 
         public abstract Option<U> Map<U>(Func<T, U> mapper);
 
-        public abstract U MapOr<U>(U defaultValue, Func<T, U> mapper);
+        public abstract U MapOr<U>(Func<T, U> mapper, U defaultValue);
 
-        public abstract U MapOrElse<U>(Func<U> defaultValueFactory, Func<T, U> mapper);
+        public abstract U MapOrElse<U>(Func<T, U> mapper, Func<U> defaultValueFactory);
 
         /*result callbacks*/
 
@@ -73,47 +70,22 @@ namespace Option
 
         public abstract Option<T> XOr(Option<T> optionB);
 
-        public virtual bool Equals(Option<T> other)
-        {
-            if (IsSome())
-            {
-                if (other.IsNone())
-                {
-                    return false;
-                }
+        public abstract Option<(T, U)> Zip<U>(Option<U> other);
 
-                return Unwrap().Equals(other.Unwrap());
-            }
+        public abstract Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func);
 
-            if (other.IsSome())
-            {
-                return false;
-            }
-
-            // both is None
-            return true;
-        }
-
-        public virtual bool Equals(IOption other)
-        {
-            if (IsNone() && other.IsNone())
-            {
-                return true;
-            }
-
-            if (other is Option<T> option)
-            {
-                return Equals(option);
-            }
-
-            return false;
-        }
+        public override Type GetUnderlyingType() => typeof(T);
 
         public override bool Equals(object obj)
         {
-            if (obj is IOption option)
+            if (obj is Option option)
             {
                 return Equals(option);
+            }
+
+            if (obj is T value)
+            {
+                return Equals(value);
             }
 
             return false;
@@ -121,18 +93,11 @@ namespace Option
 
         public override int GetHashCode()
         {
-            if (IsSome())
-            {
-                return Unwrap().GetHashCode();
-            }
-
-            Type type = GetUnderlyingType();
-            int typeHc = type.GetHashCode();
-            return unchecked(((typeHc * 17) >> 1) * 31);
+            throw new NotImplementedException();
         }
 
-        public abstract Option<(T,U)> Zip<U>(Option<U> other);
-
-        public abstract Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func);
+        public bool Equals(T value) =>
+            MapOr(val =>
+                value is IEquatable<T> equatable ? equatable.Equals(value) : val.Equals(value), false);
     }
 }

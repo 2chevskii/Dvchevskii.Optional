@@ -1,15 +1,17 @@
 ﻿using System;
 
-namespace Option
+namespace Dvchevskii.Optional.Some
 {
-    public sealed class Some<T> : Option<T>
+    internal sealed class Some<T> : Option<T>, ISome
     {
         private readonly T _value;
 
-        public Some(T value)
+        private Some(T value)
         {
             _value = value;
         }
+
+        public static Some<T> From(T value) => new Some<T>(value);
 
         public override bool IsNone() => false;
 
@@ -35,9 +37,9 @@ namespace Option
 
         public override Option<U> Map<U>(Func<T, U> mapper) => new Some<U>(mapper(_value));
 
-        public override U MapOr<U>(U defaultValue, Func<T, U> mapper) => mapper(_value);
+        public override U MapOr<U>(Func<T, U> mapper, U defaultValue) => mapper(_value);
 
-        public override U MapOrElse<U>(Func<U> defaultValueFactory, Func<T, U> mapper) =>
+        public override U MapOrElse<U>(Func<T, U> mapper, Func<U> defaultValueFactory) =>
             mapper(_value);
 
         public override Option<U> And<U>(Option<U> optionB) => optionB;
@@ -60,5 +62,23 @@ namespace Option
 
         public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func) =>
             other.IsNone() ? Option.None<R>() : Option.Some(func(Unwrap(), other.Unwrap()));
+
+        public override bool Equals(Option other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (other is Option<T> option)
+            {
+                return option.MapOr(val =>
+                    val is IEquatable<T> equatable
+                        ? equatable.Equals(Unwrap())
+                        : val.Equals(Unwrap()), false);
+            }
+
+            return false;
+        }
     }
 }

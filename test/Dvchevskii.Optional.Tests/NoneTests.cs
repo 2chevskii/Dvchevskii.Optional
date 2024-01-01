@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
-using Option.Exceptions;
+﻿using Dvchevskii.Optional.Exceptions;
+using FluentAssertions;
 
-namespace Option.Tests;
+namespace Dvchevskii.Optional.Tests;
 
 [TestClass]
 public class NoneTests
@@ -114,14 +114,11 @@ public class NoneTests
     {
         bool mapperCalled = false;
         TestSubject
-            .MapOr(
-                "__default_value",
-                _ =>
+            .MapOr(_ =>
                 {
                     mapperCalled = true;
                     return "";
-                }
-            )
+                }, "__default_value")
             .Should()
             .Be("__default_value");
         mapperCalled.Should().BeFalse();
@@ -132,14 +129,11 @@ public class NoneTests
     {
         bool mapperCalled = false;
         TestSubject
-            .MapOrElse(
-                () => 69,
-                _ =>
+            .MapOrElse(_ =>
                 {
                     mapperCalled = true;
                     return 42;
-                }
-            )
+                }, () => 69)
             .Should()
             .Be(69);
         mapperCalled.Should().BeFalse();

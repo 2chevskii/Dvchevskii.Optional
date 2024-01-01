@@ -1,10 +1,20 @@
 ﻿using System;
-using Option.Exceptions;
+using Dvchevskii.Optional.Exceptions;
 
-namespace Option
+namespace Dvchevskii.Optional.None
 {
-    public sealed class None<T> : Option<T>
+    /*
+     * NOTE: All Nones are equal, no matter the <T>'s type
+     * This is done so because we don't have smart enums in c# =(
+     */
+    internal sealed class None<T> : Option<T>, INone
     {
+        private static readonly None<T> Instance = new None<T>();
+
+        private None() { }
+
+        public static None<T> Create() => Instance;
+
         public override bool IsNone() => true;
 
         public override bool IsSome() => false;
@@ -25,9 +35,9 @@ namespace Option
 
         public override Option<U> Map<U>(Func<T, U> mapper) => Option.None<U>();
 
-        public override U MapOr<U>(U defaultValue, Func<T, U> mapper) => defaultValue;
+        public override U MapOr<U>(Func<T, U> mapper, U defaultValue) => defaultValue;
 
-        public override U MapOrElse<U>(Func<U> defaultValueFactory, Func<T, U> mapper) =>
+        public override U MapOrElse<U>(Func<T, U> mapper, Func<U> defaultValueFactory) =>
             defaultValueFactory();
 
         public override Option<U> And<U>(Option<U> optionB) => Option.None<U>();
@@ -50,6 +60,25 @@ namespace Option
         public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func)
         {
             return Option.None<R>();
+        }
+
+        public None<R> ToType<R>() => global::Dvchevskii.Optional.None.None<R>.Instance;
+
+        public override int GetHashCode() => unchecked(typeof(None<>).GetHashCode() * 31);
+
+        public override bool Equals(Option other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (other.IsNone())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

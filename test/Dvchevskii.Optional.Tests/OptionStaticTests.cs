@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
-using Option;
 
-namespace Option.Tests;
+namespace Dvchevskii.Optional.Tests;
 
 [TestClass]
 public class OptionStaticTests

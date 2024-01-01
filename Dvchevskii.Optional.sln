@@ -5,11 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8DC7E704-1971-4D45-BE61-FF280AE4DF18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Option", "src\Option\Option.csproj", "{DD80D030-5561-484A-88B0-DA8BB827ADED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional", "src\Dvchevskii.Optional\Dvchevskii.Optional.csproj", "{DD80D030-5561-484A-88B0-DA8BB827ADED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{518BBE69-4ACC-462B-B82A-679FDC122AA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Option.Tests", "test\Option.Tests\Option.Tests.csproj", "{19F284F5-A68B-4195-A4E5-97E340B1D3C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.Tests", "test\Dvchevskii.Optional.Tests\Dvchevskii.Optional.Tests.csproj", "{19F284F5-A68B-4195-A4E5-97E340B1D3C9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{62225741-5A16-4059-B6A2-AA02AE8D215E}"
 EndProject

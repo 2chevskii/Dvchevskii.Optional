@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Option.Extensions
+namespace Dvchevskii.Optional.Extensions
 {
     public static class EnumerableOptionExtensions
     {

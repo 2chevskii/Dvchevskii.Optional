@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Option.Exceptions
+namespace Dvchevskii.Optional.Exceptions
 {
     public sealed class ExpectNoneException : Exception
     {

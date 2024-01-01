@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-namespace Option.Tests;
+namespace Dvchevskii.Optional.Tests;
 
 [TestClass]
 public class SomeTests
@@ -81,13 +81,13 @@ public class SomeTests
     [TestMethod]
     public void Test_MapOr()
     {
-        TestSubject.MapOr(69, x => x * x).Should().Be(42 * 42);
+        TestSubject.MapOr(x => x * x, 69).Should().Be(42 * 42);
     }
 
     [TestMethod]
     public void Test_MapOrElse()
     {
-        TestSubject.MapOrElse(() => 69, x => x * x).Should().Be(42 * 42);
+        TestSubject.MapOrElse(x => x * x, () => 69).Should().Be(42 * 42);
     }
 
     [TestMethod]

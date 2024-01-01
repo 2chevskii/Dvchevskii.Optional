@@ -75,6 +75,7 @@
               "Clean",
               "Compile",
               "Restore",
+              "ShowVersion",
               "UnitTest"
             ]
           }
@@ -88,6 +89,7 @@
               "Clean",
               "Compile",
               "Restore",
+              "ShowVersion",
               "UnitTest"
             ]
           }
