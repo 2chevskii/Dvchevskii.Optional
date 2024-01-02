@@ -74,6 +74,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "Pack",
               "Restore",
               "ShowVersion",
               "UnitTest"
@@ -88,6 +89,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "Pack",
               "Restore",
               "ShowVersion",
               "UnitTest"

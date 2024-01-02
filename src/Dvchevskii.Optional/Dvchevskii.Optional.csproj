@@ -4,9 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version Condition="'$(Version)' == ''">1.0.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon_128.jpg</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="$(SolutionDir)README.md" Pack="true" PackagePath="\" />
+    <None Include="$(SolutionDir)assets\icon_128.jpg" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

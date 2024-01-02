@@ -29,7 +29,29 @@ class Build : NukeBuild
     Target Compile =>
         _ =>
             _.DependsOn(Restore)
-                .Executes(() => DotNetTasks.DotNetBuild(c => c.SetConfiguration(Configuration)));
+                .Executes(
+                    () =>
+                        DotNetTasks.DotNetBuild(
+                            c =>
+                                c.SetVersion(Version.SemVer)
+                                    .SetConfiguration(Configuration)
+                                    .EnableNoRestore()
+                        )
+                );
+
+    Target Pack =>
+        _ =>
+            _.DependsOn(Compile)
+                .Executes(
+                    () =>
+                        DotNetTasks.DotNetPack(
+                            c =>
+                                c.SetConfiguration(Configuration)
+                                    .EnableNoBuild()
+                                    .EnableNoRestore()
+                                    .SetVersion(Version.SemVer)
+                        )
+                );
 
     Target UnitTest =>
         _ =>
