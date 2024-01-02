@@ -1,3 +1,4 @@
+using System.Text;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Tools.DotNet;
@@ -19,6 +20,16 @@ class Build : NukeBuild
 
     Target ShowVersion =>
         _ => _.Executes(() => Log.Information("Version:\n{Version}", Version.ToYaml()));
+
+    Target OutputVersionEnv => _ => _.Executes(() =>
+    {
+        string currentEnv = EnvironmentInfo.GetVariable("GITHUB_ENV");
+        StringBuilder sb = new StringBuilder(currentEnv);
+        string versionString = Version.SemVer;
+        sb.Append("GITVERSION_SEMVER=");
+        sb.AppendLine(versionString);
+        EnvironmentInfo.SetVariable("GITHUB_ENV", sb.ToString());
+    });
 
     Target Clean =>
         _ =>
