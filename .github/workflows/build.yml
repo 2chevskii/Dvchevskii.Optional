@@ -1,31 +1,36 @@
-on: [push]
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository preserving full history (needed for GitVersion)
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: ./build.sh compile
+      - name: Run nuke (compile)
+        run: ./build.sh compile
   unit-test:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository preserving full history (needed for GitVersion)
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: ./build.sh unit-test
-      - uses: actions/upload-artifact@v4
+      - name: Run nuke (unit-test)
+        run: ./build.sh unit-test
+      - name: Upload test results report
+        uses: actions/upload-artifact@v4
         with:
           path: test/Dvchevskii.Optional.Tests/TestResults/testResults.html
           name: testResults.html
-  pack:
-    runs-on: ubuntu-22.04
-    needs: [unit-test]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - run: ./build.sh pack --configuration Release
-      - uses: actions/upload-artifact@v4
-        with:
-          path: src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.*.nupkg
+# pack:
+#   runs-on: ubuntu-22.04
+#   needs: [unit-test]
+#   steps:
+#     - uses: actions/checkout@v4
+#       with:
+#         fetch-depth: 0
+#     - run: ./build.sh pack --configuration Release
+#     - uses: actions/upload-artifact@v4
+#       with:
+#         path: src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.*.nupkg
