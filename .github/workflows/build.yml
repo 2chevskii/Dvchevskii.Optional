@@ -18,3 +18,14 @@ jobs:
         with:
           path: test/Dvchevskii.Optional.Tests/TestResults/testResults.html
           name: testResults.html
+  pack:
+    runs-on: ubuntu-22.04
+    needs: [unit-test]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: ./build.sh pack --configuration Release
+      - uses: actions/upload-artifact@v4
+        with:
+          path: src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.*.nupkg
