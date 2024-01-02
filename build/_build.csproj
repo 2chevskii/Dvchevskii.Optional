@@ -12,10 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Credfeto.ChangeLog" Version="1.10.19.111" />
+    <PackageReference Include="LibGit2Sharp" Version="0.29.0" />
+    <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="Nuke.Common" Version="7.0.6" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageDownload Include="gitreleasemanager" Version="[0.16.0]" />
     <PackageDownload Include="GitVersion.Tool" Version="[6.0.0-beta.4]" />
   </ItemGroup>
 

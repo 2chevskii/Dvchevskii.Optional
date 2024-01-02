@@ -8,7 +8,7 @@ namespace Dvchevskii.Optional.Extensions
     {
         public static Option<byte> ParseUInt8(string input)
         {
-            if (!byte.TryParse(input, out var value))
+            if (!byte.TryParse(input, out byte value))
             {
                 return Option.None<byte>();
             }
@@ -18,7 +18,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<sbyte> ParseInt8(string input)
         {
-            if (!sbyte.TryParse(input, out var value))
+            if (!sbyte.TryParse(input, out sbyte value))
             {
                 return Option.None<sbyte>();
             }
@@ -28,7 +28,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<ushort> ParseUInt16(string input)
         {
-            if (!ushort.TryParse(input, out var value))
+            if (!ushort.TryParse(input, out ushort value))
             {
                 return Option.None<ushort>();
             }
@@ -38,7 +38,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<short> ParseInt16(string input)
         {
-            if (!short.TryParse(input, out var value))
+            if (!short.TryParse(input, out short value))
             {
                 return Option.None<short>();
             }
@@ -48,7 +48,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<uint> ParseUInt32(string input)
         {
-            if (!uint.TryParse(input, out var value))
+            if (!uint.TryParse(input, out uint value))
             {
                 return Option.None<uint>();
             }
@@ -58,7 +58,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<int> ParseInt32(string input)
         {
-            if (!int.TryParse(input, out var value))
+            if (!int.TryParse(input, out int value))
             {
                 return Option.None<int>();
             }
@@ -68,7 +68,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<ulong> ParseUInt64(string input)
         {
-            if (!ulong.TryParse(input, out var value))
+            if (!ulong.TryParse(input, out ulong value))
             {
                 return Option.None<ulong>();
             }
@@ -78,7 +78,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<long> ParseInt64(string input)
         {
-            if (!long.TryParse(input, out var value))
+            if (!long.TryParse(input, out long value))
             {
                 return Option.None<long>();
             }
@@ -88,7 +88,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<BigInteger> ParseBigInt(string input)
         {
-            if (!BigInteger.TryParse(input, out var value))
+            if (!BigInteger.TryParse(input, out BigInteger value))
             {
                 return Option.None<BigInteger>();
             }
@@ -98,7 +98,7 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Option<bool> ParseBool(string input)
         {
-            if (!bool.TryParse(input, out var value))
+            if (!bool.TryParse(input, out bool value))
             {
                 return Option.None<bool>();
             }

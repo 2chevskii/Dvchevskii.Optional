@@ -6,3 +6,4 @@ coverage/
 /.vs/
 /.nuke/temp/
 *.DotSettings.user
+.nuget/

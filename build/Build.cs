@@ -1,69 +1,105 @@
-using System.Text;
+// ReSharper disable AllUnderscoreLocalParameterName
+
+using System;
+using LibGit2Sharp;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.IO;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
-using Nuke.Utilities.Text.Yaml;
 using Serilog;
+using Repository = LibGit2Sharp.Repository;
 
 class Build : NukeBuild
 {
-    public static int Main() => Execute<Build>(x => x.Compile);
+    const string NugetOrgSource = "https://api.nuget.org/v3/index.json";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild
-        ? Configuration.Debug
-        : Configuration.Release;
+    readonly Configuration Configuration = Configuration.Debug;
+
+    readonly string NugetApiKey = EnvironmentInfo.GetVariable("NUGET_API_KEY");
 
     [GitVersion]
     readonly GitVersion Version;
 
-    Target ShowVersion =>
-        _ => _.Executes(() => Log.Information("Version:\n{Version}", Version.ToYaml()));
+    string TagName => $"v{Version.SemVer}";
 
-    Target OutputVersionEnv => _ => _.Executes(() =>
-    {
-        string currentEnv = EnvironmentInfo.GetVariable("GITHUB_ENV");
-        StringBuilder sb = new StringBuilder(currentEnv);
-        string versionString = Version.SemVer;
-        sb.Append("GITVERSION_SEMVER=");
-        sb.AppendLine(versionString);
-        EnvironmentInfo.SetVariable("GITHUB_ENV", sb.ToString());
-    });
+    Target ActionsSetSemver =>
+        _ =>
+            _.OnlyWhenDynamic(() => Host is GitHubActions)
+                .Executes(() =>
+                {
+                    string versionString = Version.SemVer;
+                    GitHubActions.Instance.WriteDebug(
+                        $"Appending calculated semantic version to GitHub environment: {versionString}"
+                    );
+                    AbsolutePath githubEnvPath = EnvironmentInfo.GetVariable("GITHUB_ENV");
+                    githubEnvPath.AppendAllLines(new[] { "GITVERSION_SEMVER=" + versionString });
+                });
 
     Target Clean =>
         _ =>
-            _.Before(Restore)
-                .Executes(() => DotNetTasks.DotNetClean(c => c.SetConfiguration(Configuration)));
+            _.Executes(
+                () => DotNetTasks.DotNetClean(settings => settings.SetConfiguration(Configuration))
+            );
+
+    Target CleanAll =>
+        _ =>
+            _.Executes(
+                () =>
+                    DotNetTasks.DotNetClean(
+                        settings => settings.SetConfiguration(Configuration.Debug)
+                    ),
+                () =>
+                    DotNetTasks.DotNetClean(
+                        settings => settings.SetConfiguration(Configuration.Release)
+                    )
+            );
 
     Target Restore => _ => _.Executes(() => DotNetTasks.DotNetRestore());
 
-    Target Compile =>
+    Target CompileMain =>
         _ =>
             _.DependsOn(Restore)
-                .Executes(
-                    () =>
-                        DotNetTasks.DotNetBuild(
-                            c =>
-                                c.SetVersion(Version.SemVer)
-                                    .SetConfiguration(Configuration)
-                                    .EnableNoRestore()
-                        )
-                );
+                .Executes(() =>
+                {
+                    Log.Information("Compiling Dvchevskii.Optional:{Configuration}", Configuration);
+                    DotNetTasks.DotNetBuild(
+                        settings =>
+                            settings
+                                .SetProjectFile(
+                                    RootDirectory
+                                        / "src/Dvchevskii.Optional/Dvchevskii.Optional.csproj"
+                                )
+                                .SetConfiguration(Configuration)
+                                .SetVersion(Version.SemVer)
+                                .EnableNoRestore()
+                    );
+                });
 
-    Target Pack =>
+    Target CompileTests =>
         _ =>
-            _.DependsOn(Compile)
-                .Executes(
-                    () =>
-                        DotNetTasks.DotNetPack(
-                            c =>
-                                c.SetConfiguration(Configuration)
-                                    .EnableNoBuild()
-                                    .EnableNoRestore()
-                                    .SetVersion(Version.SemVer)
-                        )
-                );
+            _.DependsOn(Restore, CompileMain)
+                .Executes(() =>
+                {
+                    Log.Information(
+                        "Compiling Dvchevskii.Optional.Tests:{Configuration}",
+                        Configuration
+                    );
+                    DotNetTasks.DotNetBuild(
+                        settings =>
+                            settings
+                                .SetProjectFile(
+                                    RootDirectory
+                                        / "test/Dvchevskii.Optional.Tests/Dvchevskii.Optional.Tests.csproj"
+                                )
+                                .SetConfiguration(Configuration)
+                                .EnableNoRestore()
+                                .EnableNoDependencies()
+                    );
+                });
+
+    Target Compile => _ => _.DependsOn(CompileMain, CompileTests);
 
     Target UnitTest =>
         _ =>
@@ -72,12 +108,71 @@ class Build : NukeBuild
                     () =>
                         DotNetTasks.DotNetTest(
                             c =>
-                                c.SetConfiguration(Configuration)
+                                c.SetProjectFile(
+                                        RootDirectory
+                                            / "test/Dvchevskii.Optional.Tests/Dvchevskii.Optional.Tests.csproj"
+                                    )
+                                    .SetConfiguration(Configuration)
+                                    .EnableNoRestore()
                                     .EnableNoBuild()
                                     .AddLoggers(
                                         "console;verbosity=detailed",
-                                        "html;logfilename=testResults.html"
+                                        "html;logfilename=test-results.html"
                                     )
                         )
                 );
+
+    Target Pack =>
+        _ =>
+            _.DependsOn(CompileMain)
+                .Executes(
+                    () =>
+                        DotNetTasks.DotNetPack(
+                            c =>
+                                c.SetConfiguration(Configuration)
+                                    .EnableNoRestore()
+                                    .EnableNoBuild()
+                                    .EnableNoDependencies()
+                                    .SetVersion(Version.SemVer)
+                        )
+                );
+
+    Target GetSemver =>
+        _ => _.Executes(() => Log.Information("Semantic version is: {SemVer}", Version.SemVer));
+
+    Target CreateVersionTag =>
+        _ =>
+            _.Executes(() =>
+            {
+                using Repository repository = GetRepository();
+
+                if (repository.Head.FriendlyName != "master")
+                {
+                    throw new Exception(
+                        "Failed to create next version tag: Not on 'master' branch"
+                    );
+                }
+
+                Tag tag = repository.ApplyTag(TagName);
+
+                PushOptions pushOptions = new PushOptions
+                {
+                    CredentialsProvider = (_, usernameFromUrl, _) =>
+                        new UsernamePasswordCredentials
+                        {
+                            Username = GitHubActions.Instance.RepositoryOwner,
+                            Password = GitHubActions.Instance.Token
+                        }
+                };
+
+                Remote remote = repository.Network.Remotes["origin"];
+                repository.Network.Push(remote, tag.CanonicalName, pushOptions);
+            });
+
+    public static int Main() => Execute<Build>(x => x.Compile);
+
+    Repository GetRepository()
+    {
+        return new Repository(RootDirectory);
+    }
 }

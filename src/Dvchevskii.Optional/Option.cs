@@ -13,7 +13,7 @@ namespace Dvchevskii.Optional
 
         public static Option<T> Create<T>(OptionParsingFactory<T> factory, string input)
         {
-            if (!factory(input, out var value))
+            if (!factory(input, out T value))
             {
                 return None<T>();
             }

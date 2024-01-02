@@ -72,11 +72,16 @@
           "items": {
             "type": "string",
             "enum": [
+              "ActionsSetSemver",
               "Clean",
+              "CleanAll",
               "Compile",
+              "CompileMain",
+              "CompileTests",
+              "CreateVersionTag",
+              "GetSemver",
               "Pack",
               "Restore",
-              "ShowVersion",
               "UnitTest"
             ]
           }
@@ -87,11 +92,16 @@
           "items": {
             "type": "string",
             "enum": [
+              "ActionsSetSemver",
               "Clean",
+              "CleanAll",
               "Compile",
+              "CompileMain",
+              "CompileTests",
+              "CreateVersionTag",
+              "GetSemver",
               "Pack",
               "Restore",
-              "ShowVersion",
               "UnitTest"
             ]
           }

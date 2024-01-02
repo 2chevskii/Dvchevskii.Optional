@@ -6,31 +6,31 @@ namespace Dvchevskii.Optional.Tests;
 [TestClass]
 public class NoneTests
 {
-    private Option<int> TestSubject;
+    private Option<int> _testSubject = null!;
 
     [TestInitialize]
     public void Initialize()
     {
-        TestSubject = Option.None<int>();
+        _testSubject = Option.None<int>();
     }
 
     [TestMethod]
     public void Test_IsNone()
     {
-        TestSubject.IsNone().Should().BeTrue();
+        _testSubject.IsNone().Should().BeTrue();
     }
 
     [TestMethod]
     public void Test_IsSome()
     {
-        TestSubject.IsSome().Should().BeFalse();
+        _testSubject.IsSome().Should().BeFalse();
     }
 
     [TestMethod]
     public void Test_IsSomeAnd()
     {
-        TestSubject.IsSomeAnd(_ => false).Should().BeFalse();
-        TestSubject.IsSomeAnd(_ => true).Should().BeFalse();
+        _testSubject.IsSomeAnd(_ => false).Should().BeFalse();
+        _testSubject.IsSomeAnd(_ => true).Should().BeFalse();
 
         bool predicateCalled = false;
 
@@ -40,7 +40,7 @@ public class NoneTests
             return false;
         };
 
-        TestSubject.IsSomeAnd(predicate).Should().BeFalse();
+        _testSubject.IsSomeAnd(predicate).Should().BeFalse();
         predicateCalled.Should().BeFalse();
     }
 
@@ -48,7 +48,7 @@ public class NoneTests
     public void Test_Inspect()
     {
         bool inspectCalled = false;
-        TestSubject.Inspect(_ => inspectCalled = true).Should().Be(TestSubject);
+        _testSubject.Inspect(_ => inspectCalled = true).Should().Be(_testSubject);
         inspectCalled.Should().BeFalse();
     }
 
@@ -56,7 +56,7 @@ public class NoneTests
     public void Test_Expect()
     {
         string msg = "__test_msg";
-        TestSubject
+        _testSubject
             .Invoking(s => s.Expect(msg))
             .Should()
             .Throw<ExpectNoneException>()
@@ -67,7 +67,7 @@ public class NoneTests
     [TestMethod]
     public void Test_Unwrap()
     {
-        TestSubject
+        _testSubject
             .Invoking(s => s.Unwrap())
             .Should()
             .Throw<ExpectNoneException>()
@@ -78,27 +78,27 @@ public class NoneTests
     [TestMethod]
     public void Test_UnwrapOr()
     {
-        TestSubject.Invoking(s => s.UnwrapOr(69)).Should().NotThrow();
-        TestSubject.UnwrapOr(69).Should().Be(69);
+        _testSubject.Invoking(s => s.UnwrapOr(69)).Should().NotThrow();
+        _testSubject.UnwrapOr(69).Should().Be(69);
     }
 
     [TestMethod]
     public void Test_UnwrapOrElse()
     {
-        TestSubject.UnwrapOrElse(() => 69).Should().Be(69);
+        _testSubject.UnwrapOrElse(() => 69).Should().Be(69);
     }
 
     [TestMethod]
     public void Test_UnwrapOrDefault()
     {
-        TestSubject.UnwrapOrDefault().Should().Be(default);
+        _testSubject.UnwrapOrDefault().Should().Be(default);
     }
 
     [TestMethod]
     public void Test_Map()
     {
         bool mapperCalled = false;
-        TestSubject
+        _testSubject
             .Map(_ =>
             {
                 mapperCalled = true;
@@ -113,7 +113,7 @@ public class NoneTests
     public void Test_MapOr()
     {
         bool mapperCalled = false;
-        TestSubject
+        _testSubject
             .MapOr(_ =>
                 {
                     mapperCalled = true;
@@ -128,7 +128,7 @@ public class NoneTests
     public void Test_MapOrElse()
     {
         bool mapperCalled = false;
-        TestSubject
+        _testSubject
             .MapOrElse(_ =>
                 {
                     mapperCalled = true;
@@ -142,20 +142,20 @@ public class NoneTests
     [TestMethod]
     public void Test_And()
     {
-        TestSubject.And(Option.Some(42)).Should().Be(Option.None<int>());
+        _testSubject.And(Option.Some(42)).Should().Be(Option.None<int>());
     }
 
     [TestMethod]
     public void Test_AndThen()
     {
-        TestSubject.AndThen(_ => Option.Some(42)).Should().Be(Option.None<int>());
+        _testSubject.AndThen(_ => Option.Some(42)).Should().Be(Option.None<int>());
     }
 
     [TestMethod]
     public void Test_Filter()
     {
         bool predicateCalled = false;
-        TestSubject
+        _testSubject
             .Filter(x =>
             {
                 predicateCalled = true;
@@ -169,18 +169,18 @@ public class NoneTests
     [TestMethod]
     public void Test_Or()
     {
-        TestSubject.Or(Option.Some(42)).Should().Be(Option.Some(42));
+        _testSubject.Or(Option.Some(42)).Should().Be(Option.Some(42));
     }
 
     [TestMethod]
     public void Test_OrElse()
     {
-        TestSubject.OrElse(() => Option.Some(42)).Should().Be(Option.Some(42));
+        _testSubject.OrElse(() => Option.Some(42)).Should().Be(Option.Some(42));
     }
 
     [TestMethod]
     public void Test_XOr()
     {
-        TestSubject.XOr(Option.Some(42)).Should().Be(Option.Some(42));
+        _testSubject.XOr(Option.Some(42)).Should().Be(Option.Some(42));
     }
 }
