@@ -1,26 +1,40 @@
 // ReSharper disable AllUnderscoreLocalParameterName
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using LibGit2Sharp;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitReleaseManager;
 using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Utilities.Collections;
+using Octokit;
+using Octokit.Internal;
 using Serilog;
+using Credentials = Octokit.Credentials;
+using FileMode = System.IO.FileMode;
 using Repository = LibGit2Sharp.Repository;
 
 class Build : NukeBuild
 {
     const string NugetOrgSource = "https://api.nuget.org/v3/index.json";
 
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
+    [Nuke.Common.Parameter(
+        "Configuration to build - Default is 'Debug' (local) or 'Release' (server)"
+    )]
     readonly Configuration Configuration = Configuration.Debug;
 
     readonly string NugetApiKey = EnvironmentInfo.GetVariable("NUGET_API_KEY");
 
     [GitVersion]
     readonly GitVersion Version;
+
+    IGitHubClient GitHubClient;
 
     string TagName => $"v{Version.SemVer}";
 
@@ -169,10 +183,85 @@ class Build : NukeBuild
                 repository.Network.Push(remote, tag.CanonicalName, pushOptions);
             });
 
+    Target CreateReleaseDraft =>
+        _ =>
+            _.Executes(async () =>
+            {
+                using Repository repository = GetRepository();
+                Tag tag = repository.Tags.FirstOrDefault(
+                    x => x.PeeledTarget.Sha == repository.Head.Tip.Sha
+                );
+                if (tag == null)
+                {
+                    throw new Exception("Tag was not found");
+                }
+
+                string releaseName = tag.FriendlyName.StartsWith(
+                    "v",
+                    StringComparison.OrdinalIgnoreCase
+                )
+                    ? tag.FriendlyName.Substring(1)
+                    : tag.FriendlyName;
+
+                IReadOnlyCollection<AbsolutePath> packageAssets = (
+                    RootDirectory / "artifacts/packages"
+                ).GlobFiles("*.*nupkg");
+                AbsolutePath libraryAsset =
+                    RootDirectory / "artifacts/libraries/netstandard2.0.zip";
+                (RootDirectory / "artifacts/libraries/netstandard2.0").ZipTo(libraryAsset);
+
+                Release release = await GitHubClient.Repository.Release.Create(
+                    GitHubActions.Instance.RepositoryOwner,
+                    GitHubActions.Instance.Repository.Substring(
+                        GitHubActions.Instance.Repository.IndexOf('/') + 1
+                    ),
+                    new NewRelease(tag.FriendlyName)
+                    {
+                        Name = releaseName,
+                        Draft = true,
+                        TargetCommitish = "master"
+                    }
+                );
+
+                foreach (AbsolutePath assetPath in packageAssets.Append(libraryAsset))
+                {
+                    await using FileStream fs = new FileStream(
+                        assetPath,
+                        FileMode.Open,
+                        FileAccess.Read,
+                        FileShare.Read
+                    );
+
+                    ReleaseAssetUpload upload = new ReleaseAssetUpload(
+                        assetPath.Name,
+                        "application/octet-stream",
+                        fs,
+                        null
+                    );
+                    ReleaseAsset _ = await GitHubClient.Repository.Release.UploadAsset(
+                        release,
+                        upload
+                    );
+                }
+            });
+
     public static int Main() => Execute<Build>(x => x.Compile);
 
     Repository GetRepository()
     {
         return new Repository(RootDirectory);
+    }
+
+    protected override void OnBuildInitialized()
+    {
+        if (!IsLocalBuild && !string.IsNullOrEmpty(GitHubActions.Instance.Token))
+        {
+            GitHubClient = new GitHubClient(
+                new ProductHeaderValue("Dvchevskii.Optional"),
+                new InMemoryCredentialStore(
+                    new Credentials(GitHubActions.Instance.Token, AuthenticationType.Bearer)
+                )
+            );
+        }
     }
 }

@@ -8,6 +8,13 @@ jobs:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+      - name: 🧪 Run unit tests
+        run: ./build.sh unit-test
+      - name: 📄 Upload test results report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test/Dvchevskii.Optional.Tests/TestResults/test-results.html
   build-artifacts:
     runs-on: ubuntu-22.04
     needs: [unit-test]
@@ -50,8 +57,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: netstandard2.0
-          path: artifacts/libraries
+          path: artifacts/libraries/netstandard2.0
       - name: Create release draft
         run: ./build.sh create-release-draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write

@@ -1,4 +1,8 @@
-on: [push, pull_request]
+on:
+  push:
+    tags-ignore: "*"
+  pull_request: {}
+
 jobs:
   unit-test:
     runs-on: ubuntu-22.04
