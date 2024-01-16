@@ -81,6 +81,7 @@
               "CreateReleaseDraft",
               "CreateVersionTag",
               "GetSemver",
+              "NugetPushArtifacts",
               "Pack",
               "Restore",
               "UnitTest"
@@ -102,6 +103,7 @@
               "CreateReleaseDraft",
               "CreateVersionTag",
               "GetSemver",
+              "NugetPushArtifacts",
               "Pack",
               "Restore",
               "UnitTest"
