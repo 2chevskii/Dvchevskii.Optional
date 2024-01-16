@@ -1,0 +1,20 @@
+on:
+  release:
+    types: [published]
+
+jobs:
+  push-artifacts:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: ✅ Repository checkout
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages
+      - name: 🚚 Run push artifacts target
+        run: ./build.sh nuget-push-artifacts
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

@@ -1,7 +1,7 @@
 ﻿namespace Dvchevskii.Optional.Some
 {
-    public interface ISome
-    {
-        
-    }
+    /// <summary>
+    /// Marker interface to allow pattern matching. Indicates that the <see cref="Option{T}.IsSome()"/> contains a value
+    /// </summary>
+    public interface ISome { }
 }

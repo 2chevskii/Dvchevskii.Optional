@@ -3,7 +3,7 @@ using Dvchevskii.Optional.Exceptions;
 
 namespace Dvchevskii.Optional
 {
-    public abstract class Option<T> : Optional.Option, IEquatable<T>
+    public abstract class Option<T> : Option, IEquatable<T>
     {
         protected internal Option() { }
 

@@ -245,6 +245,23 @@ class Build : NukeBuild
                 }
             });
 
+    Target NugetPushArtifacts =>
+        _ =>
+            _.Executes(() =>
+            {
+                AbsolutePath packagePath =
+                    RootDirectory
+                    / $"artifacts/packages/Dvchevskii.Optional.{Version.SemVer}.nupkg";
+
+                DotNetTasks.DotNetNuGetPush(
+                    settings =>
+                        settings
+                            .SetSource(NugetOrgSource)
+                            .SetApiKey(NugetApiKey)
+                            .SetTargetPath(packagePath)
+                );
+            });
+
     public static int Main() => Execute<Build>(x => x.Compile);
 
     Repository GetRepository()

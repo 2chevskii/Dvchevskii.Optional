@@ -1,6 +1,4 @@
-﻿
-
-namespace Dvchevskii.Optional.Extensions
+﻿namespace Dvchevskii.Optional.Extensions
 {
     public static class OptionExtensions
     {
@@ -10,7 +8,7 @@ namespace Dvchevskii.Optional.Extensions
                 : (Option.Some(self.Unwrap().Item1), Option.Some(self.Unwrap().Item2));
 
         public static Option<T> Flatten<T>(this Option<Option<T>> self) =>
-            self.MapOrElse<Option<T>>(val => val, Option.None<T>);
+            self.MapOrElse(val => val, Option.None<T>);
 
         public static Option<T> ToOption<T>(this T value) => Option.Some(value);
     }
