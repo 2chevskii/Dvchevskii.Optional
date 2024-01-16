@@ -1,5 +1,4 @@
 ﻿using System;
-using Dvchevskii.Optional.Factories;
 
 namespace Dvchevskii.Optional
 {
@@ -7,20 +6,20 @@ namespace Dvchevskii.Optional
     {
         protected internal Option() { }
 
+        /// <summary>
+        /// Create an Option which does not contain a value
+        /// </summary>
+        /// <typeparam name="T">Value type</typeparam>
+        /// <returns></returns>
         public static Option<T> None<T>() => Optional.None.None<T>.Create();
 
+        /// <summary>
+        /// Create an Option which holds a provided <paramref name="value"/>
+        /// </summary>
+        /// <param name="value">Value which will be held in the resulting Option</param>
+        /// <typeparam name="T">Value type</typeparam>
+        /// <returns></returns>
         public static Option<T> Some<T>(T value) => Optional.Some.Some<T>.From(value);
-
-        public static Option<T> Create<T>(OptionParsingFactory<T> factory, string input)
-        {
-            if (!factory(input, out T value))
-            {
-                return None<T>();
-            }
-
-            return Some(value);
-        }
-
 
         public abstract Type GetUnderlyingType();
         public abstract bool IsSome();
