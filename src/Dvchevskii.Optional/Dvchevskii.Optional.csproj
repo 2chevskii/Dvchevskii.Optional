@@ -8,7 +8,7 @@
     <PackageIcon>icon_128.jpg</PackageIcon>
     <PackageTags>utility monads option functional</PackageTags>
     <Description>Provides utility type Option&lt;T&gt; for optional value handling</Description>
-    <PackageReleaseNotes>https://github.com/2chevskii/Dvchevskii.Optional/releases/tag/$(Version)</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/2chevskii/Dvchevskii.Optional/releases/tag/v$(Version)</PackageReleaseNotes>
     <DebugType>portable</DebugType>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
