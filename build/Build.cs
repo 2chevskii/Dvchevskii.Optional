@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using LibGit2Sharp;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
@@ -245,22 +246,60 @@ class Build : NukeBuild
                 }
             });
 
+    Target DownloadReleaseArtifacts =>
+        _ =>
+            _.Executes(async () =>
+            {
+                Release release = await GitHubClient.Repository.Release.Get(
+                    GitHubActions.Instance.RepositoryOwner,
+                    GitHubActions.Instance.Repository.Substring(
+                        GitHubActions.Instance.Repository.IndexOf('/') + 1
+                    ),
+                    GitHubActions.Instance.Ref
+                );
+                IEnumerable<ReleaseAsset> assets = release.Assets.Where(
+                    asset => asset.Name.EndsWith("nupkg")
+                );
+
+                using HttpClient httpClient = new HttpClient();
+                foreach (ReleaseAsset asset in assets)
+                {
+                    await using Stream stream = await httpClient.GetStreamAsync(
+                        asset.BrowserDownloadUrl
+                    );
+                    await using FileStream fs = new FileStream(
+                        RootDirectory / "artifacts/packages" / asset.Name,
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.None
+                    );
+
+                    await stream.CopyToAsync(fs);
+                    await fs.FlushAsync();
+                }
+            });
+
     Target NugetPushArtifacts =>
         _ =>
-            _.Executes(() =>
-            {
-                AbsolutePath packagePath =
-                    RootDirectory
-                    / $"artifacts/packages/Dvchevskii.Optional.{Version.SemVer}.nupkg";
+            _.DependsOn(DownloadReleaseArtifacts)
+                .Executes(() =>
+                {
+                    var package = (RootDirectory / "artifacts/packages")
+                        .GlobFiles("*.nupkg")
+                        .First();
 
-                DotNetTasks.DotNetNuGetPush(
-                    settings =>
-                        settings
-                            .SetSource(NugetOrgSource)
-                            .SetApiKey(NugetApiKey)
-                            .SetTargetPath(packagePath)
-                );
-            });
+                    /*AbsolutePath packagePath =
+                        RootDirectory
+                        / $"artifacts/packages/Dvchevskii.Optional.{Version.SemVer}.nupkg";*/
+
+                    DotNetTasks.DotNetNuGetPush(
+                        settings =>
+                            settings
+                                .SetSource(NugetOrgSource)
+                                .SetApiKey(NugetApiKey)
+                                .SetTargetPath(package)
+                    );
+                });
 
     public static int Main() => Execute<Build>(x => x.Compile);
 
