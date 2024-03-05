@@ -2,14 +2,9 @@
 
   <PropertyGroup>
     <Authors>2CHEVSKII</Authors>
-    <Company></Company>
     <Copyright>Copyright (c) 2024 2CHEVSKII</Copyright>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/2chevskii/Dvchevskii.Optional.git</RepositoryUrl>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <RestorePackagesPath>$(SolutionDir).nuget\packages\</RestorePackagesPath>
   </PropertyGroup>
 
 </Project>
