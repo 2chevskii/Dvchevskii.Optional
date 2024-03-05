@@ -35,10 +35,22 @@ public class ExtensionsTests
     }
 
     [TestMethod]
-    public void Test_ToOption()
+    public void Test_AsSome()
     {
-        42.ToOption().Should().BeAssignableTo<Option<int>>().And.Be(42);
-        "somestring".ToOption().Should().BeAssignableTo<Option<string>>().And.Be("somestring");
+        42.AsSome().Should().BeAssignableTo<Option<int>>()
+            .And.Be(42);
+        object? x = null;
+        x.AsSome().Should().BeAssignableTo<Option<object?>>()
+            .And.BeNull();
+    }
+
+    [TestMethod]
+    public void Test_AsNone()
+    {
+        42.AsNone().Should().BeAssignableTo<Option<int>>()
+            .And.Be(Option.None<int>());
+        object? x = null;
+        x.AsNone().Should().BeAssignableTo<Option<object?>>().And.BeNull();
     }
 
     [TestMethod]

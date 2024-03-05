@@ -10,6 +10,7 @@
         public static Option<T> Flatten<T>(this Option<Option<T>> self) =>
             self.MapOrElse(val => val, Option.None<T>);
 
-        public static Option<T> ToOption<T>(this T value) => Option.Some(value);
+        public static Option<T> AsSome<T>(this T self) => Option.Some(self);
+        public static Option<T> AsNone<T>(this T _) => Option.None<T>();
     }
 }

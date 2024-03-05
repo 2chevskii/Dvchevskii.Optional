@@ -2,14 +2,14 @@
 {
     public static class NullableExtensions
     {
-        public static Option<T> NoneIfNull<T>(this T? nullable) where T : struct
+        public static Option<T> AsOption<T>(this T? nullable) where T : struct
         {
-            if (nullable.HasValue)
-            {
-                return Option.Some(nullable.Value);
-            }
+            return nullable.HasValue ? Option.Some(nullable.Value) : Option.None<T>();
+        }
 
-            return Option.None<T>();
+        public static Option<T> AsOption<T>(this T nullable) where T : class
+        {
+            return nullable == null ? Option.None<T>() : Option.Some(nullable);
         }
     }
 }
