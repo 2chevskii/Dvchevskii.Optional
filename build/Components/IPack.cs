@@ -12,8 +12,7 @@ interface IPack : ICompile
                         DotNetTasks.DotNetPack(
                             settings =>
                                 settings
-                                    .EnableNoRestore()
-                                    .EnableNoDependencies()
+                                    .EnableNoBuild()
                                     .SetVersion(Version.SemVer)
                                     .SetConfiguration(Configuration)
                                     .SetProcessWorkingDirectory(Sln.Directory)
