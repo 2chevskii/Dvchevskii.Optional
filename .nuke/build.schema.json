@@ -76,6 +76,7 @@
               "Compile",
               "CompileMain",
               "CompileTests",
+              "Pack",
               "Restore",
               "ShowVersion"
             ]
@@ -94,6 +95,7 @@
               "Compile",
               "CompileMain",
               "CompileTests",
+              "Pack",
               "Restore",
               "ShowVersion"
             ]
