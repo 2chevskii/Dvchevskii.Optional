@@ -4,6 +4,10 @@ namespace Dvchevskii.Optional
 {
     public abstract class Option : IEquatable<Option>
     {
+        public abstract bool IsSome { get; }
+        public abstract bool IsNone { get; }
+        public abstract Type UnderlyingType { get; }
+
         protected internal Option() { }
 
         /// <summary>
@@ -11,7 +15,7 @@ namespace Dvchevskii.Optional
         /// </summary>
         /// <typeparam name="T">Value type</typeparam>
         /// <returns></returns>
-        public static Option<T> None<T>() => Optional.None.None<T>.Create();
+        public static Option<T> None<T>() => Optional.None<T>.Create();
 
         /// <summary>
         /// Create an Option which holds a provided <paramref name="value"/>
@@ -19,11 +23,7 @@ namespace Dvchevskii.Optional
         /// <param name="value">Value which will be held in the resulting Option</param>
         /// <typeparam name="T">Value type</typeparam>
         /// <returns></returns>
-        public static Option<T> Some<T>(T value) => Optional.Some.Some<T>.From(value);
-
-        public abstract Type GetUnderlyingType();
-        public abstract bool IsSome();
-        public abstract bool IsNone();
+        public static Option<T> Some<T>(T value) => Optional.Some<T>.From(value);
 
         public abstract bool Equals(Option other);
     }

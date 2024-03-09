@@ -13,7 +13,7 @@ namespace Dvchevskii.Optional.Extensions
         /// <returns></returns>
         public static IEnumerable<T> UnwrapAll<T>(this IEnumerable<Option<T>> enumerable) =>
             from option in enumerable
-            where option.IsSome()
+            where option.IsSome
             select option.Unwrap();
 
         /// <summary>

@@ -6,13 +6,13 @@ namespace Dvchevskii.Optional.Tests;
 [TestClass]
 public class NullableExtensionsTests
 {
-    // [TestMethod]
-    public void Test_NoneIfNull()
+    [TestMethod]
+    public void Test_AsOption()
     {
-        /*AsNullable<int>(42).AsOption().IsSomeAnd(x => x == 42).Should().BeTrue();
-        AsNullable<double>(null).NoneIfNull().IsNone().Should().BeTrue();
-        AsNullable<float>(69.0f).NoneIfNull().IsSomeAnd(x => x == 69.0f).Should().BeTrue();
-        AsNullable<bool>(null).NoneIfNull().IsNone().Should().BeTrue();*/
+        new int?(42).AsOption().IsSomeAnd(x => x == 42).Should().BeTrue();
+        new double?().AsOption().IsNone.Should().BeTrue();
+        new float?(69.0f).AsOption().IsSome.Should().BeTrue();
+        new bool?().AsOption().IsSome.Should().BeFalse();
     }
 
     private static T? AsNullable<T>(T? val)

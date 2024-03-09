@@ -1,8 +1,18 @@
 using Nuke.Common;
+using Serilog;
 
-class Build : NukeBuild, IHazArtifacts, ICompile, IRestore, IPack
+partial class Build : NukeBuild
 {
-    public static int Main() => Execute<Build>(x => ((ICompile)x).Compile);
+    // public static int Main() => Execute<Build>(x => x.Compile);
 
-    protected override void OnBuildInitialized() => ((IHazArtifacts)this).CreateArtifactDirectories();
+    static int Main()
+    {
+        return Execute<Build>(build => build.Compile);
+    }
+
+    protected override void OnBuildInitialized()
+    {
+        Log.Information("Build version: {Version}", Version.SemVer);
+        CreateArtifactDirectories();
+    }
 }

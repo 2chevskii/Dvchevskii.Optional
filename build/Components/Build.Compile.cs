@@ -1,22 +1,19 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Serilog;
 
-interface ICompile : IHazSlnFiles, IHazArtifacts, IHazConfiguration, IRestore, IHazVersion
+[SuppressMessage("ReSharper", "AllUnderscoreLocalParameterName")]
+partial class Build
 {
-    Target Compile => _ => _.DependsOn(CompileMain, CompileTests);
+    Target Compile => _ => _.DependsOn(CompileSrc, CompileTests);
 
-    Target CompileMain =>
+    Target CompileSrc =>
         _ =>
             _.DependsOn(Restore)
                 .Executes(
-                    () =>
-                        Log.Information(
-                            "Building projects: {@Projects}",
-                            MainProjects.Select(x => x.Name)
-                        ),
+                    () => Log.Information("Building SRC projects: {Projects}", SrcProjects),
                     () => Log.Information("Version: {Version}", Version.SemVer),
                     () =>
                         DotNetTasks.DotNetBuild(
@@ -24,7 +21,7 @@ interface ICompile : IHazSlnFiles, IHazArtifacts, IHazConfiguration, IRestore, I
                                 settings
                                     .Apply(BuildSettingsBase)
                                     .CombineWith(
-                                        MainProjects,
+                                        SrcProjects,
                                         (settings, project) => settings.SetProjectFile(project)
                                     )
                         )
@@ -33,8 +30,10 @@ interface ICompile : IHazSlnFiles, IHazArtifacts, IHazConfiguration, IRestore, I
     Target CompileTests =>
         _ =>
             _.DependsOn(Restore)
-                .DependsOn(CompileMain)
+                .DependsOn(CompileSrc)
                 .Executes(
+                    () => Log.Information("Building TEST projects: {Projects}", TestProjects),
+                    () => Log.Information("Version: {Version}", Version.SemVer),
                     () =>
                         DotNetTasks.DotNetBuild(
                             settings =>
@@ -52,6 +51,6 @@ interface ICompile : IHazSlnFiles, IHazArtifacts, IHazConfiguration, IRestore, I
             settings
                 .EnableNoRestore()
                 .EnableNoDependencies()
-                .SetConfiguration(Configuration)
-                .SetVersion(Version.SemVer);
+                .SetVersion(Version.SemVer)
+                .SetConfiguration(Configuration);
 }

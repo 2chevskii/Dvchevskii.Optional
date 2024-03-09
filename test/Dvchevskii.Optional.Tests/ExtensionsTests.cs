@@ -37,20 +37,25 @@ public class ExtensionsTests
     [TestMethod]
     public void Test_AsSome()
     {
-        42.AsSome().Should().BeAssignableTo<Option<int>>()
-            .And.Be(42);
+        42.AsSome().Should().BeAssignableTo<Option<int>>().And.Be(42);
         object? x = null;
-        x.AsSome().Should().BeAssignableTo<Option<object?>>()
-            .And.BeNull();
+        (x.AsSome().Equals(null)).Should().BeTrue();
+        x.AsSome().Equals(null).Should().BeTrue();
     }
 
     [TestMethod]
     public void Test_AsNone()
     {
-        42.AsNone().Should().BeAssignableTo<Option<int>>()
-            .And.Be(Option.None<int>());
+        Option.None<int>().Should().BeAssignableTo<Option<int>>();
+        42.AsNone().Should().BeAssignableTo<Option<int>>().And.Be(Option.None<int>());
         object? x = null;
-        x.AsNone().Should().BeAssignableTo<Option<object?>>().And.BeNull();
+        x.AsNone().Should().BeAssignableTo<Option<object?>>().And.Be(Option.None<object?>());
+        x.AsNone().Should().NotBe(new object());
+        42.AsNone().Should().NotBe(42);
+
+        (x.AsNone() == null).Should().BeFalse();
+        x.AsNone().Should().NotBeNull();
+        x.AsNone().Should().NotBe(null);
     }
 
     [TestMethod]
@@ -75,8 +80,8 @@ public class ExtensionsTests
     [TestMethod]
     public void Test_ParseBool()
     {
-        "True".ToBoolOption().Should().Be(Option.Some(true));
-        "false".ToBoolOption().Should().Be(Option.Some(false));
+        "True".ToBoolOption().Should().Be(Option.Some(true)).And.Be(true);
+        "false".ToBoolOption().Should().Be(Option.Some(false)).And.Be(false);
         "NotTrueOrFalse".ToBoolOption().Should().Be(Option.None<bool>());
     }
 

@@ -5,11 +5,9 @@ namespace Dvchevskii.Optional
 {
     public abstract class Option<T> : Option, IEquatable<T>
     {
+        public override Type UnderlyingType => typeof(T);
+
         protected internal Option() { }
-
-        public static explicit operator T(Option<T> option) => option.Unwrap();
-
-        public static implicit operator Option<T>(T value) => Some(value);
 
         /// <summary>
         /// Check if <see cref="Option{T}"/> contains a value and it matches the <paramref name="predicate"/>
@@ -56,8 +54,6 @@ namespace Dvchevskii.Optional
 
         public abstract U MapOrElse<U>(Func<T, U> mapper, Func<U> defaultValueFactory);
 
-        /*result callbacks*/
-
         public abstract Option<U> And<U>(Option<U> optionB);
 
         public abstract Option<U> AndThen<U>(Func<T, Option<U>> optionBFactory);
@@ -74,30 +70,6 @@ namespace Dvchevskii.Optional
 
         public abstract Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func);
 
-        public override Type GetUnderlyingType() => typeof(T);
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Option option)
-            {
-                return Equals(option);
-            }
-
-            if (obj is T value)
-            {
-                return Equals(value);
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Equals(T value) =>
-            MapOr(val =>
-                value is IEquatable<T> equatable ? equatable.Equals(value) : val.Equals(value), false);
+        public abstract bool Equals(T other);
     }
 }

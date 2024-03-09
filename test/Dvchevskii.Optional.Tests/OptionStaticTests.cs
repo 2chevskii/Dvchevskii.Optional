@@ -12,10 +12,10 @@ public class OptionStaticTests
         Option<int> none2 = Option.None<int>();
         Option<int> notNone = Option.Some(0);
 
-        none.Should().Match<Option<object>>(x => x.IsNone());
-        none2.Should().Match<Option<int>>(x => x.IsNone());
-        none2.Should().Match<Option<int>>(x => x.IsSome() == false);
-        notNone.Should().Match<Option<int>>(x => x.IsNone() == false);
-        notNone.Should().Match<Option<int>>(x => x.IsSome() == true);
+        none.Should().Match<Option<object>>(x => x.IsNone);
+        none2.Should().Match<Option<int>>(x => x.IsNone);
+        none2.Should().Match<Option<int>>(x => x.IsSome == false);
+        notNone.Should().Match<Option<int>>(x => x.IsNone == false);
+        notNone.Should().Match<Option<int>>(x => x.IsSome == true);
     }
 }
