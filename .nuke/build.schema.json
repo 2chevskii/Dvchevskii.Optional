@@ -82,6 +82,7 @@
               "CompileSrc",
               "CompileTests",
               "CoverageCollect",
+              "CoverageReport",
               "Pack",
               "Restore",
               "Test"
@@ -105,6 +106,7 @@
               "CompileSrc",
               "CompileTests",
               "CoverageCollect",
+              "CoverageReport",
               "Pack",
               "Restore",
               "Test"
