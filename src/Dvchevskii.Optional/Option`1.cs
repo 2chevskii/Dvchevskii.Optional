@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using Dvchevskii.Optional.Exceptions;
 
 // ReSharper disable InconsistentNaming
-
 namespace Dvchevskii.Optional
 {
     public abstract class Option<T> : Option, IEquatable<T>

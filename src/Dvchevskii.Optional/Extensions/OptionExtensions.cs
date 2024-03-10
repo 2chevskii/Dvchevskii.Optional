@@ -1,5 +1,8 @@
-﻿namespace Dvchevskii.Optional.Extensions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Dvchevskii.Optional.Extensions
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class OptionExtensions
     {
         public static (Option<T>, Option<U>) Unzip<T, U>(this Option<(T, U)> self) =>

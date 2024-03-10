@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Dvchevskii.Optional.Async", AllInternalsVisible = true)]
 
 namespace Dvchevskii.Optional
 {
@@ -8,7 +11,7 @@ namespace Dvchevskii.Optional
         public abstract bool IsNone { get; }
         public abstract Type UnderlyingType { get; }
 
-        protected internal Option() { }
+        private protected Option() { }
 
         /// <summary>
         /// Create an Option which does not contain a value
