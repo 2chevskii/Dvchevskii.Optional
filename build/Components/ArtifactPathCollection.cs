@@ -45,9 +45,7 @@ sealed class ArtifactPathCollection(Build build)
     {
         targetFramework ??= GetDefaultTargetFramework(project);
 
-        string shortProjectName = project.ShortName();
-
-        string archiveName = $"{shortProjectName}.{Version}-{targetFramework}.zip";
+        string archiveName = $"{project.Name}.{Version}_{targetFramework}.zip";
 
         return LibrariesDirectory / archiveName;
     }

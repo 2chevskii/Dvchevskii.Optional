@@ -43,6 +43,9 @@
             "VSCode"
           ]
         },
+        "HtmlTestResults": {
+          "type": "boolean"
+        },
         "NoLogo": {
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
@@ -78,6 +81,7 @@
               "Compile",
               "CompileSrc",
               "CompileTests",
+              "CoverageCollect",
               "Pack",
               "Restore",
               "Test"
@@ -100,6 +104,7 @@
               "Compile",
               "CompileSrc",
               "CompileTests",
+              "CoverageCollect",
               "Pack",
               "Restore",
               "Test"

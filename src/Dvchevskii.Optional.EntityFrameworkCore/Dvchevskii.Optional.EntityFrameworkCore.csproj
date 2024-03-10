@@ -8,7 +8,7 @@
     <ProjectReference Include="..\Dvchevskii.Optional.Async\Dvchevskii.Optional.Async.csproj" />
     <ProjectReference Include="..\Dvchevskii.Optional\Dvchevskii.Optional.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
   </ItemGroup>

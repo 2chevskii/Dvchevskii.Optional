@@ -2,7 +2,7 @@
 using Dvchevskii.Optional.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dvchevskii.Optional.EntityFrameworkCoreExtensions;
+namespace Dvchevskii.Optional.EntityFrameworkCore;
 
 public static class DbSetExtensions
 {

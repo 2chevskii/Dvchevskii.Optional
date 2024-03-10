@@ -5,7 +5,7 @@ using Dvchevskii.Optional.Async;
 using Dvchevskii.Optional.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dvchevskii.Optional.EntityFrameworkCoreExtensions
+namespace Dvchevskii.Optional.EntityFrameworkCore
 {
     public static class QueryableExtensions
     {

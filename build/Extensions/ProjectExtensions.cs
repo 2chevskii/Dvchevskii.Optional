@@ -2,5 +2,5 @@
 
 static class ProjectExtensions
 {
-    public static string ShortName(this Project project) => project.GetProperty("ShortName");
+    public static bool IsPackable(this Project project) => project.GetProperty<bool>("IsPackable");
 }

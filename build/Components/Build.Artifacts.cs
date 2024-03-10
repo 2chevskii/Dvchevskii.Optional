@@ -1,9 +1,6 @@
 ﻿using Nuke.Common;
 using Nuke.Common.IO;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
-using Serilog;
 
 partial class Build
 {
@@ -55,27 +52,4 @@ partial class Build
 
     void CreateArtifactDirectories() =>
         ArtifactPaths.All.ForEach(directory => directory.CreateDirectory());
-}
-
-partial class Build
-{
-    Target Test =>
-        _ =>
-            _.DependsOn(CompileTests)
-                .Executes(
-                    () => Log.Information("Running tests using projects: {Projects}", TestProjects),
-                    () =>
-                        DotNetTasks.DotNetTest(
-                            settings =>
-                                settings
-                                    .Apply(TestSettingsBase)
-                                    .CombineWith(
-                                        TestProjects,
-                                        (settings, project) => settings.SetProjectFile(project)
-                                    )
-                        )
-                );
-
-    Configure<DotNetTestSettings> TestSettingsBase =>
-        _ => _.EnableNoBuild().SetConfiguration(Configuration);
 }

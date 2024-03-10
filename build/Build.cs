@@ -1,4 +1,6 @@
 using Nuke.Common;
+using Nuke.Common.Tools.Coverlet;
+using Nuke.Common.Tools.GitVersion;
 using Serilog;
 
 partial class Build : NukeBuild

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.Async", "src\Dvchevskii.Optional.Async\Dvchevskii.Optional.Async.csproj", "{74302BBC-ED9E-4FBC-BC49-DC075B0BEB98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.EntityFrameworkCoreExtensions", "src\Dvchevskii.Optional.EntityFrameworkCoreExtensions\Dvchevskii.Optional.EntityFrameworkCoreExtensions.csproj", "{E422BDA6-A3A0-4D25-BC10-6EE1D8236232}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.EntityFrameworkCore", "src\Dvchevskii.Optional.EntityFrameworkCore\Dvchevskii.Optional.EntityFrameworkCore.csproj", "{E422BDA6-A3A0-4D25-BC10-6EE1D8236232}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

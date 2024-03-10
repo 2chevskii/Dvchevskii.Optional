@@ -1,4 +1,8 @@
-﻿using Nuke.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using Nuke.Common;
+using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Serilog;
@@ -20,7 +24,7 @@ partial class Build
                                 settings
                                     .Apply(PackSettingsBase)
                                     .CombineWith(
-                                        SrcProjects,
+                                        SrcProjects.Packable(),
                                         (settings, project) => settings.SetProject(project)
                                     )
                         )

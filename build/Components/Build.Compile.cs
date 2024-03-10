@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
@@ -13,7 +14,7 @@ partial class Build
         _ =>
             _.DependsOn(Restore)
                 .Executes(
-                    () => Log.Information("Building SRC projects: {Projects}", SrcProjects),
+                    () => Log.Information("Building SRC projects: {Projects}", SrcProjects.Names()),
                     () => Log.Information("Version: {Version}", Version.SemVer),
                     () =>
                         DotNetTasks.DotNetBuild(
@@ -32,7 +33,8 @@ partial class Build
             _.DependsOn(Restore)
                 .DependsOn(CompileSrc)
                 .Executes(
-                    () => Log.Information("Building TEST projects: {Projects}", TestProjects),
+                    () =>
+                        Log.Information("Building TEST projects: {Projects}", TestProjects.Names()),
                     () => Log.Information("Version: {Version}", Version.SemVer),
                     () =>
                         DotNetTasks.DotNetBuild(
