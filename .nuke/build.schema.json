@@ -6,6 +6,9 @@
     "build": {
       "type": "object",
       "properties": {
+        "CleanAllConfigurations": {
+          "type": "boolean"
+        },
         "Configuration": {
           "type": "string",
           "enum": [
@@ -78,6 +81,7 @@
               "ArtifactsLib",
               "ArtifactsPkg",
               "CleanArtifacts",
+              "CleanSln",
               "Compile",
               "CompileSrc",
               "CompileTests",
@@ -102,6 +106,7 @@
               "ArtifactsLib",
               "ArtifactsPkg",
               "CleanArtifacts",
+              "CleanSln",
               "Compile",
               "CompileSrc",
               "CompileTests",

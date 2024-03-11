@@ -2,18 +2,16 @@
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Utilities.Collections;
 
 sealed class ArtifactPathCollection(Build build)
 {
-    const string DIRNAME_BIN = "bin";
-
     AbsolutePath BuildRootDirectory => ((INukeBuild)build).RootDirectory;
     public AbsolutePath RootDirectory => BuildRootDirectory / "artifacts";
     public AbsolutePath PackagesDirectory => RootDirectory / "pkg";
     public AbsolutePath LibrariesDirectory => RootDirectory / "lib";
     public AbsolutePath TestResults => RootDirectory / "test_results";
     public AbsolutePath Coverage => TestResults / "coverage";
+    public AbsolutePath CoverageHtmlReport => Coverage / "html";
     public AbsolutePath DocsDirectory => RootDirectory / "docs";
 
     public AbsolutePath[] All =>
@@ -26,79 +24,45 @@ sealed class ArtifactPathCollection(Build build)
             DocsDirectory
         ];
 
-    Configuration CurrentConfiguration => build.Configuration;
     string Version => build.Version.SemVer;
 
-    public AbsolutePath GetProjectBuildDirectory(
-        Project project,
-        Configuration configuration = null,
-        string targetFramework = null
-    )
-    {
-        configuration ??= CurrentConfiguration;
-        targetFramework ??= GetDefaultTargetFramework(project);
-
-        return project.Directory / DIRNAME_BIN / configuration / targetFramework;
-    }
+    public string GetProjectPackageName(Project project, string extension = null) =>
+        $"{project.Name}.{Version}{(extension != null ? "." + extension : string.Empty)}";
 
     public AbsolutePath GetProjectBuildArchivePath(Project project, string targetFramework = null)
     {
         targetFramework ??= GetDefaultTargetFramework(project);
 
         string archiveName = $"{project.Name}.{Version}_{targetFramework}.zip";
-
         return LibrariesDirectory / archiveName;
     }
 
-    public AbsolutePath GetProjectNuGetPackagePath(
-        Project project,
-        Configuration configuration = null,
-        string version = null
-    )
+    public AbsolutePath GetProjectNuGetPackagePath(Project project)
     {
-        configuration ??= CurrentConfiguration;
-        version ??= Version;
-
-        return project.Directory / DIRNAME_BIN / configuration / $"{project.Name}.{version}.nupkg";
+        return build.GetProjectBinConfigurationDirectory(project)
+            / GetProjectPackageName(project, "nupkg");
     }
 
-    public AbsolutePath GetProjectNuGetSymbolPackagePath(
-        Project project,
-        Configuration configuration = null,
-        string version = null
-    )
+    public AbsolutePath GetProjectNuGetSymbolPackagePath(Project project)
     {
-        configuration ??= CurrentConfiguration;
-        version ??= Version;
-
-        return project.Directory / DIRNAME_BIN / configuration / $"{project.Name}.{version}.snupkg";
+        return build.GetProjectBinConfigurationDirectory(project)
+            / GetProjectPackageName(project, "snupkg");
     }
 
-    public AbsolutePath GetProjectNuGetPackageArtifactPath(Project project, string version = null)
+    public AbsolutePath GetProjectNuGetPackageArtifactPath(Project project)
     {
-        version ??= Version;
-
-        return PackagesDirectory / $"{project.Name}.{version}.nupkg";
+        return PackagesDirectory / GetProjectPackageName(project, "nupkg");
     }
 
-    public AbsolutePath GetProjectNuGetSymbolPackageArtifactPath(
-        Project project,
-        string version = null
-    )
+    public AbsolutePath GetProjectNuGetSymbolPackageArtifactPath(Project project)
     {
-        version ??= Version;
+        return PackagesDirectory / GetProjectPackageName(project, "snupkg");
+    }
 
-        return PackagesDirectory / $"{project.Name}.{version}.snupkg";
+    public AbsolutePath GetProjectCoverageOutputPath(Project project)
+    {
+        return Coverage / (project.Name + ".xml");
     }
 
     string GetDefaultTargetFramework(Project project) => project.GetTargetFrameworks()!.First();
-}
-
-partial class Build
-{
-    Target CleanArtifacts =>
-        _ =>
-            _.Executes(
-                () => ArtifactPaths.All.ForEach(directory => directory.CreateOrCleanDirectory())
-            );
 }

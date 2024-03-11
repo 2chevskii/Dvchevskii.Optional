@@ -1,4 +1,5 @@
-﻿using Nuke.Common;
+﻿// ReSharper disable AllUnderscoreLocalParameterName
+using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Utilities.Collections;
 
@@ -14,8 +15,7 @@ partial class Build
                     () =>
                         SrcProjects.ForEach(
                             project =>
-                                ArtifactPaths
-                                    .GetProjectBuildDirectory(project)
+                                GetProjectBuildDirectory(project)
                                     .ZipTo(ArtifactPaths.GetProjectBuildArchivePath(project))
                         )
                 );

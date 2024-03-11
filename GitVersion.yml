@@ -4,7 +4,7 @@ semantic-version-format: Strict
 branches: {}
 ignore:
   sha: []
-mode: Mainline
+mode: ContinuousDelivery
 increment: None
 source-branches: []
 is-source-branch-for: []
