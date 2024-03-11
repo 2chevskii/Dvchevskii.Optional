@@ -30,12 +30,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-cobertura
-          path: artifacts/test_results/*.xml
+          path: artifacts/test_results/coverage/*.xml
       - name: 📤 Upload coverage reports (html)
         uses: actions/upload-artifact@v4
         with:
           name: coverage-html
-          path: artifacts/test_results/html/
+          path: artifacts/test_results/coverage/html/
   build:
     runs-on: ubuntu-22.04
     needs: test
