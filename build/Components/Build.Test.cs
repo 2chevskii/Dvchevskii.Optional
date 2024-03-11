@@ -50,7 +50,7 @@ partial class Build
                         HtmlTestResults,
                         settings =>
                             settings.AddLoggers(
-                                $"html;logfilename=test-results.{project.Name}.html"
+                                $"html;logfilename={project.Name}.html"
                             )
                     )
                     .When(
