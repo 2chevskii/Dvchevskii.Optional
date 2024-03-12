@@ -2,20 +2,9 @@ merge-message-formats: {}
 update-build-number: true
 semantic-version-format: Strict
 branches:
-  master:
-    label: ''
-    increment: Patch
-    prevent-increment:
-      of-merged-branch: true
-    track-merge-target: false
-    regex: ^master$
-    tracks-release-branches: false
-    is-release-branch: false
-    is-main-branch: true
-    pre-release-weight: 55000
   feature:
     source-branches:
-      - master
+      - main
       - feature
     increment: Minor
 mode: ContinuousDelivery
