@@ -28,8 +28,6 @@ jobs:
         with:
           name: coverage-html
           path: artifacts/test_results/coverage/html/
-      - name: Intentionally fail to test auto_tag workflow behaviour
-        run: exit 1
   build:
     runs-on: ubuntu-22.04
     needs: test
