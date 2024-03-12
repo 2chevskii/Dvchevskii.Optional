@@ -7,15 +7,9 @@ on:
       - feature/async
     types: completed
 jobs:
-  verify-build-successful:
-    runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion != 'success' }}
-    steps:
-      - name: ❌ Fail if calling workflow has failed
-        run: exit 1
   create-release-tag:
     runs-on: ubuntu-22.04
-    needs: verify-build-successful
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
