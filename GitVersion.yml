@@ -1,7 +1,9 @@
 merge-message-formats: {}
 update-build-number: true
 semantic-version-format: Strict
-branches: {}
+branches:
+  feature:
+    regex: feature\/.*
 ignore:
   sha: []
 mode: ContinuousDelivery
