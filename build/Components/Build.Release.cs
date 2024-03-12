@@ -16,7 +16,19 @@ partial class Build
                 var tagName = $"v{Version.SemVer}";
                 var tag = Repository.ApplyTag(tagName);
 
+                Log.Information(
+                    "Creating tag {TagName} on commit {CommitSha}",
+                    tagName,
+                    Repository.Head.Tip.Sha[..7]
+                );
+
                 Remote remote = Repository.Network.Remotes["origin"];
+
+                Log.Debug(
+                    "Pushing created tag to remote {RemoteName} at {RemoteUrl}",
+                    remote.Name,
+                    remote.PushUrl
+                );
 
                 Repository.Network.Push(
                     remote,
