@@ -1,4 +1,4 @@
-name: auto-tag
+name: auto-version-tag
 on:
   workflow_run:
     workflows: main
