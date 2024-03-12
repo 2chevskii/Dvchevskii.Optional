@@ -1,22 +1,28 @@
 on:
-  push:
-    branches: [master, feature/async]
+  workflow_run:
+    workflows: main.yml
+    branches:
+      - master
+      - feature/async
+    types: completed
+
 jobs:
-  test:
+  verify-build-successful:
     runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion != 'success' }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - run: ./build.sh Test
+      - name: ❌ Fail if calling workflow has failed
+        run: exit 1
   create-release-tag:
     runs-on: ubuntu-22.04
-    needs: test
+    needs: verify-build-successful
     steps:
-      - uses: actions/checkout@v4
+      - name: ✅ Repository checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: ./build.sh CreateReleaseTag
+      - name: 📍 Create and push new tag
+        run: ./build.sh CreateReleaseTag
         env:
           GITHUB_TOKEN: ${{ github.token }}
     permissions:
