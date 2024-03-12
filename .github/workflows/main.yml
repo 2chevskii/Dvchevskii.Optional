@@ -46,3 +46,5 @@ jobs:
           path: |
             artifacts/pkg/*.nupkg
             artifacts/pkg/*.snupkg
+env:
+  NUKE_NO_LOGO: true

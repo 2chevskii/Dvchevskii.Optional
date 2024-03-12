@@ -1,0 +1,46 @@
+on:
+  push:
+    tags: v*.*
+jobs:
+  build-artifacts:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: ✅ Repository checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 🛠️ Compile 'Release' configuration
+        run: ./build.sh Compile --configuration Release
+      - name: 🧪 Run tests
+        run: ./build.sh Test --configuration Release --skip CompileTests
+      - name: 📦 Create NuGet packages
+        run: ./build.sh Pack ArtifactsPkg --configuration Release --skip CompileSrc
+      - name: 📤 Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: |
+            artifacts/pkg/*.nupkg
+            artifacts/pkg/*.snupkg
+
+  draft-release:
+    runs-on: ubuntu-22.04
+    needs: build-artifacts
+    steps:
+      - name: ✅ Repository checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 📥 Download built artifacts 1/2
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: artifacts/release
+      - name: 📎 Create release draft
+        run: ./build.sh CreateReleaseDraft --release-artifacts artifacts/release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+env:
+  NUKE_NO_LOGO: true
