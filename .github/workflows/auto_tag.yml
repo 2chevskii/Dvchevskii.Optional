@@ -1,11 +1,11 @@
+name: auto_tag
 on:
   workflow_run:
-    workflows: main.yml
+    workflows: main
     branches:
       - master
       - feature/async
     types: completed
-
 jobs:
   verify-build-successful:
     runs-on: ubuntu-22.04
