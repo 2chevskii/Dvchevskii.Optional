@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using LibGit2Sharp;
 using Nuke.Common;
+using Nuke.Common.CI.GitHubActions;
 using Serilog;
 
 partial class Build
@@ -9,11 +11,25 @@ partial class Build
 
     Target CreateReleaseTag =>
         _ =>
-            _.Executes(async () =>
+            _.Executes(() =>
             {
-                Log.Information(
-                    "Repository tags: {Tags}",
-                    Repository.Tags.Select(tag => tag.CanonicalName)
+                var tagName = $"v{Version.SemVer}";
+                var tag = Repository.ApplyTag(tagName);
+
+                Remote remote = Repository.Network.Remotes["origin"];
+
+                Repository.Network.Push(
+                    remote,
+                    tag.CanonicalName,
+                    new PushOptions
+                    {
+                        CredentialsProvider = (_, _, _) =>
+                            new UsernamePasswordCredentials
+                            {
+                                Username = GitHubActions.Instance.RepositoryOwner,
+                                Password = GitHubActions.Instance.Token
+                            }
+                    }
                 );
             });
 
