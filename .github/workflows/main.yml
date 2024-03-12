@@ -43,21 +43,14 @@ jobs:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Set environment variable with calculated semantic version
-        run: ./build.sh actions-set-semver
-      - name: 🔨 Compile (Release)
-        run: ./build.sh compile-main --configuration Release
-      - name: 📦 Create packages
-        run: ./build.sh pack --configuration Release
-      - name: 💾 Upload packages to artifact storage
+      - name: 🛠️ Compile 'Release' configuration
+        run: ./build.sh CompileSrc --configuration Release
+      - name: 📦 Create NuGet packages
+        run: ./build.sh Pack --configuration Release --skip CompileSrc
+      - name: 📤 Upload NuGet packages
         uses: actions/upload-artifact@v4
         with:
           name: packages
           path: |
-            src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.${{ env.GITVERSION_SEMVER }}.nupkg
-            src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.${{ env.GITVERSION_SEMVER }}.snupkg
-      - name: 💾 Upload libraries to artifact storage
-        uses: actions/upload-artifact@v4
-        with:
-          name: netstandard2.0
-          path: src/Dvchevskii.Optional/bin/Release/netstandard2.0/*
+            artifacts/pkg/*.nupkg
+            artifacts/pkg/*.snupkg
