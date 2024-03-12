@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Serilog;
@@ -9,7 +7,7 @@ partial class Build
 {
     Repository Repository;
 
-    Target CreateReleaseTag =>
+    Target CreateVersionTag =>
         _ =>
             _.Executes(() =>
             {

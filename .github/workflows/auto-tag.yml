@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: 📍 Create and push new tag
-        run: ./build.sh CreateReleaseTag
+        run: ./build.sh CreateVersionTag
         env:
           GITHUB_TOKEN: ${{ github.token }}
     permissions:
