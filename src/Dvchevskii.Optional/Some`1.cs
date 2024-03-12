@@ -1,10 +1,15 @@
 ﻿using System;
 
-namespace Dvchevskii.Optional.Some
+// ReSharper disable InconsistentNaming
+
+namespace Dvchevskii.Optional
 {
-    internal sealed class Some<T> : Option<T>, ISome
+    public sealed class Some<T> : Option<T>
     {
         private readonly T _value;
+
+        public override bool IsSome => true;
+        public override bool IsNone => false;
 
         private Some(T value)
         {
@@ -12,10 +17,6 @@ namespace Dvchevskii.Optional.Some
         }
 
         public static Some<T> From(T value) => new Some<T>(value);
-
-        public override bool IsNone() => false;
-
-        public override bool IsSome() => true;
 
         public override bool IsSomeAnd(Predicate<T> predicate) => predicate(_value);
 
@@ -48,37 +49,71 @@ namespace Dvchevskii.Optional.Some
             optionBFactory(_value);
 
         public override Option<T> Filter(Predicate<T> predicate) =>
-            predicate(_value) ? Option.Some(_value) : Option.None<T>();
+            predicate(_value) ? (Option<T>)Some(_value) : None<T>();
 
         public override Option<T> Or(Option<T> optionB) => this;
 
         public override Option<T> OrElse(Func<Option<T>> optionBFactory) => this;
 
         public override Option<T> XOr(Option<T> optionB) =>
-            optionB.IsSome() ? Option.None<T>() : this;
+            optionB.IsSome ? (Option<T>)None<T>() : this;
 
         public override Option<(T, U)> Zip<U>(Option<U> other) =>
-            other.IsNone() ? Option.None<(T, U)>() : Option.Some((Unwrap(), other.Unwrap()));
+            other.IsNone ? (Option<(T, U)>)None<(T, U)>() : Some((Unwrap(), other.Unwrap()));
 
         public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func) =>
-            other.IsNone() ? Option.None<R>() : Option.Some(func(Unwrap(), other.Unwrap()));
+            other.IsNone ? (Option<R>)None<R>() : Some(func(Unwrap(), other.Unwrap()));
 
-        public override bool Equals(Option other)
+        public override bool Equals(object obj)
         {
-            if (other is null)
+            if (obj is T value)
             {
-                return false;
+                return Equals(value);
             }
 
-            if (other is Option<T> option)
+            if (obj is Option option)
             {
-                return option.MapOr(val =>
-                    val is IEquatable<T> equatable
-                        ? equatable.Equals(Unwrap())
-                        : val.Equals(Unwrap()), false);
+                return Equals(option);
+            }
+
+            if (obj == null)
+            {
+                return _value == null;
             }
 
             return false;
         }
+
+        public override bool Equals(Option other)
+        {
+            if (other == null)
+            {
+                return _value == null;
+            }
+
+            if (other.IsNone)
+            {
+                return false;
+            }
+
+            return ((Option<T>)other).Unwrap().Equals(_value);
+        }
+
+        public override bool Equals(T other)
+        {
+            if (other == null)
+            {
+                return _value == null;
+            }
+
+            return _value?.Equals(other) ?? false;
+        }
+
+        public override int GetHashCode() =>
+            unchecked(
+                (GetType().GetHashCode() * 31 ^ 17 * typeof(T).GetHashCode())
+                    * (_value?.GetHashCode() ?? 1)
+                ^ 23
+            );
     }
 }

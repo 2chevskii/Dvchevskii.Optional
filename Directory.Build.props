@@ -2,14 +2,33 @@
 
   <PropertyGroup>
     <Authors>2CHEVSKII</Authors>
-    <Company></Company>
     <Copyright>Copyright (c) 2024 2CHEVSKII</Copyright>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/2chevskii/Dvchevskii.Optional.git</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/2chevskii/optional/releases/tag/v$(Version)</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
-    <RestorePackagesPath>$(SolutionDir).nuget\packages\</RestorePackagesPath>
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Version Condition="'$(Version)' == ''">1.0.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>icon_128.jpg</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)assets\icon_128.jpg" Pack="true" PackagePath="\"
+      Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
 
 </Project>

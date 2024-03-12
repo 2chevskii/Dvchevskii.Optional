@@ -17,13 +17,13 @@ public class NoneTests
     [TestMethod]
     public void Test_IsNone()
     {
-        _testSubject.IsNone().Should().BeTrue();
+        _testSubject.IsNone.Should().BeTrue();
     }
 
     [TestMethod]
     public void Test_IsSome()
     {
-        _testSubject.IsSome().Should().BeFalse();
+        _testSubject.IsSome.Should().BeFalse();
     }
 
     [TestMethod]

@@ -2,22 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version Condition="'$(Version)' == ''">1.0.0</Version>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>icon_128.jpg</PackageIcon>
     <PackageTags>utility monads option functional</PackageTags>
     <Description>Provides utility type Option&lt;T&gt; for optional value handling</Description>
-    <PackageReleaseNotes>https://github.com/2chevskii/Dvchevskii.Optional/releases/tag/v$(Version)</PackageReleaseNotes>
-    <DebugType>portable</DebugType>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="$(SolutionDir)README.md" Pack="true" PackagePath="\" />
-    <None Include="$(SolutionDir)assets\icon_128.jpg" Pack="true" PackagePath="\" />
-    <None Include="$(SolutionDir)LICENSE" Pack="true" PackagePath="\" />
-  </ItemGroup>
 
 </Project>
