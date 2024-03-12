@@ -1,3 +1,4 @@
+name: draft-release
 on:
   push:
     tags: v*.*
