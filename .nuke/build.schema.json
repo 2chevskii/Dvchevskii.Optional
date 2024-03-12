@@ -6,10 +6,13 @@
     "build": {
       "type": "object",
       "properties": {
+        "CleanAllConfigurations": {
+          "type": "boolean"
+        },
         "Configuration": {
           "type": "string",
-          "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
           "enum": [
+            "All",
             "Debug",
             "Release"
           ]
@@ -43,6 +46,9 @@
             "VSCode"
           ]
         },
+        "HtmlTestResults": {
+          "type": "boolean"
+        },
         "NoLogo": {
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
@@ -72,21 +78,25 @@
           "items": {
             "type": "string",
             "enum": [
-              "ActionsSetSemver",
-              "Clean",
-              "CleanAll",
+              "ArtifactsLib",
+              "ArtifactsPkg",
+              "CleanArtifacts",
+              "CleanSln",
               "Compile",
-              "CompileMain",
+              "CompileSrc",
               "CompileTests",
-              "CreateReleaseDraft",
+              "CoverageCollect",
+              "CoverageReport",
               "CreateVersionTag",
-              "GetSemver",
-              "NugetPushArtifacts",
               "Pack",
               "Restore",
-              "UnitTest"
+              "Test"
             ]
           }
+        },
+        "Sln": {
+          "type": "string",
+          "description": "Path to a solution file that is automatically loaded"
         },
         "Target": {
           "type": "array",
@@ -94,19 +104,19 @@
           "items": {
             "type": "string",
             "enum": [
-              "ActionsSetSemver",
-              "Clean",
-              "CleanAll",
+              "ArtifactsLib",
+              "ArtifactsPkg",
+              "CleanArtifacts",
+              "CleanSln",
               "Compile",
-              "CompileMain",
+              "CompileSrc",
               "CompileTests",
-              "CreateReleaseDraft",
+              "CoverageCollect",
+              "CoverageReport",
               "CreateVersionTag",
-              "GetSemver",
-              "NugetPushArtifacts",
               "Pack",
               "Restore",
-              "UnitTest"
+              "Test"
             ]
           }
         },

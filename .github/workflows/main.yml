@@ -1,49 +1,50 @@
-on:
-  push:
-    branches:
-      - "*"
-      - "*/*"
-  pull_request:
-    branches:
-      - "*"
-      - "*/*"
-
+name: main
+on: [push, pull_request]
 jobs:
-  unit-test:
+  test:
     runs-on: ubuntu-22.04
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+      - name: 🛠️ Compile test projects
+        run: ./build.sh CompileTests
       - name: 🧪 Run unit tests
-        run: ./build.sh unit-test
-      - name: 📄 Upload test results report
+        run: ./build.sh Test --html-test-results --skip CompileTests
+      - name: 📝 Collect coverage reports
+        run: ./build.sh CoverageCollect CoverageReport --skip CompileTests
+      - name: 📤 Upload test results report
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: test/Dvchevskii.Optional.Tests/TestResults/test-results.html
+          path: artifacts/test_results/*.html
+      - name: 📤 Upload coverage reports (cobertura)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-cobertura
+          path: artifacts/test_results/coverage/*.xml
+      - name: 📤 Upload coverage reports (html)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: artifacts/test_results/coverage/html/
   build:
     runs-on: ubuntu-22.04
-    needs: unit-test
+    needs: test
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Set environment variable with calculated semantic version
-        run: ./build.sh actions-set-semver
-      - name: 🔨 Compile (Release)
-        run: ./build.sh compile-main --configuration Release
-      - name: 📦 Create packages
-        run: ./build.sh pack --configuration Release
-      - name: 💾 Upload packages to artifact storage
+      - name: 🛠️ Compile 'Release' configuration
+        run: ./build.sh CompileSrc --configuration Release
+      - name: 📦 Create NuGet packages
+        run: ./build.sh Pack ArtifactsPkg --configuration Release --skip CompileSrc
+      - name: 📤 Upload NuGet packages
         uses: actions/upload-artifact@v4
         with:
           name: packages
           path: |
-            src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.${{ env.GITVERSION_SEMVER }}.nupkg
-            src/Dvchevskii.Optional/bin/Release/Dvchevskii.Optional.${{ env.GITVERSION_SEMVER }}.snupkg
-      - name: 💾 Upload libraries to artifact storage
-        uses: actions/upload-artifact@v4
-        with:
-          name: netstandard2.0
-          path: src/Dvchevskii.Optional/bin/Release/netstandard2.0/*
+            artifacts/pkg/*.nupkg
+            artifacts/pkg/*.snupkg
+env:
+  NUKE_NO_LOGO: true
