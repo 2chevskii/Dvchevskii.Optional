@@ -15,7 +15,7 @@ jobs:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Compile test projects
+      - name: 🛠️ Compile test projects
         run: ./build.sh CompileTests
       - name: 🧪 Run unit tests
         run: ./build.sh Test --html-test-results --skip CompileTests

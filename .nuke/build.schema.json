@@ -87,6 +87,7 @@
               "CompileTests",
               "CoverageCollect",
               "CoverageReport",
+              "CreateReleaseTag",
               "Pack",
               "Restore",
               "Test"
@@ -112,6 +113,7 @@
               "CompileTests",
               "CoverageCollect",
               "CoverageReport",
+              "CreateReleaseTag",
               "Pack",
               "Restore",
               "Test"

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Nuke.Common;
+using Nuke.Common.Git;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;

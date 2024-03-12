@@ -16,5 +16,11 @@ partial class Build : NukeBuild
     {
         Log.Information("Build version: {Version}", Version.SemVer);
         CreateArtifactDirectories();
+        LoadRepository();
+    }
+
+    protected override void OnBuildFinished()
+    {
+        DisposeRepository();
     }
 }
