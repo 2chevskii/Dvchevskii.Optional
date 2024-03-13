@@ -1,8 +1,10 @@
 name: draft-release
 on:
   push:
-    tags: v*.*
+    tags: [v*.*, v*.*-*]
 jobs:
+  test:
+    uses: ./.github/workflows/_test.yml
   build-artifacts:
     runs-on: ubuntu-22.04
     steps:
@@ -10,10 +12,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: ⚙️ Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: ./global.json
       - name: 🛠️ Compile 'Release' configuration
-        run: ./build.sh Compile --configuration Release
-      - name: 🧪 Run tests
-        run: ./build.sh Test --configuration Release --skip CompileTests
+        run: ./build.sh CompileSrc --configuration Release
       - name: 📦 Create NuGet packages
         run: ./build.sh Pack ArtifactsPkg --configuration Release --skip CompileSrc
       - name: 📤 Upload NuGet packages
@@ -23,7 +27,6 @@ jobs:
           path: |
             artifacts/pkg/*.nupkg
             artifacts/pkg/*.snupkg
-
   draft-release:
     runs-on: ubuntu-22.04
     needs: build-artifacts
@@ -32,6 +35,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: ⚙️ Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: ./global.json
       - name: 📥 Download built artifacts 1/2
         uses: actions/download-artifact@v4
         with:

@@ -31,3 +31,5 @@ jobs:
         with:
           name: coverage-html
           path: artifacts/test_results/coverage/html/
+env:
+  NUKE_NO_LOGO: true
