@@ -4,7 +4,7 @@ using Nuke.Common.ProjectModel;
 
 partial class Build
 {
-    [Solution]
+    [Solution(SuppressBuildProjectCheck = true)]
     readonly Solution Sln;
     IReadOnlyCollection<Project> SrcProjects => Sln.GetSolutionFolder("src")!.Projects;
     IReadOnlyCollection<Project> TestProjects => Sln.GetSolutionFolder("test")!.Projects;

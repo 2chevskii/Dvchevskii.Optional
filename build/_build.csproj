@@ -3,7 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <!--suppress CheckTagEmptyBody -->
+    <!--suppress
+    CheckTagEmptyBody -->
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169;CA1050;CA1822;CA2211;IDE1006</NoWarn>
     <NukeRootDirectory>..</NukeRootDirectory>
@@ -14,13 +15,13 @@
 
   <ItemGroup>
     <PackageReference Include="LibGit2Sharp" Version="0.29.0" />
-    <PackageReference Include="Nuke.Common" Version="8.0.0"/>
+    <PackageReference Include="Nuke.Common" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageDownload Include="GitVersion.Tool" Version="[6.0.0-beta.6]"/>
-    <PackageDownload Include="coverlet.console" Version="[6.0.1]"/>
-    <PackageDownload Include="ReportGenerator" Version="[5.2.2]"/>
+    <PackageDownload Include="GitVersion.Tool" Version="[6.0.0-beta.6]" />
+    <PackageDownload Include="coverlet.console" Version="[6.0.1]" />
+    <PackageDownload Include="ReportGenerator" Version="[5.2.2]" />
   </ItemGroup>
 
 </Project>
