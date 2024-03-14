@@ -21,8 +21,7 @@ jobs:
       - name: 📍 Create and push new tag
         run: ./build.sh CreateVersionTag
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-    permissions:
-      contents: write
+          GITHUB_TOKEN: ${{ secrets.REPOSITORY_TOKEN }}
+    environment: allow-push-tag
 env:
   NUKE_NO_LOGO: true
