@@ -8,6 +8,7 @@ jobs:
     uses: ./.github/workflows/_test.yml
   build-artifacts:
     runs-on: ubuntu-22.04
+    needs: test
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
             artifacts/pkg/*.snupkg
   draft-release:
     runs-on: ubuntu-22.04
-    needs: build-artifacts
+    needs: [test, build-artifacts]
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
