@@ -47,7 +47,7 @@ jobs:
           name: packages
           path: artifacts/release
       - name: 📎 Create release draft
-        run: ./build.sh CreateReleaseDraft --release-artifacts artifacts/release
+        run: ./build.sh CreateReleaseDraft --release-assets artifacts/release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
