@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.Async",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.EntityFrameworkCore", "src\Dvchevskii.Optional.EntityFrameworkCore\Dvchevskii.Optional.EntityFrameworkCore.csproj", "{E422BDA6-A3A0-4D25-BC10-6EE1D8236232}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.Async.Tests", "test\Dvchevskii.Optional.Async.Tests\Dvchevskii.Optional.Async.Tests.csproj", "{35C1CF80-BC18-49BC-B898-7856F91D7F8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,11 +47,16 @@ Global
 		{E422BDA6-A3A0-4D25-BC10-6EE1D8236232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E422BDA6-A3A0-4D25-BC10-6EE1D8236232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E422BDA6-A3A0-4D25-BC10-6EE1D8236232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35C1CF80-BC18-49BC-B898-7856F91D7F8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35C1CF80-BC18-49BC-B898-7856F91D7F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35C1CF80-BC18-49BC-B898-7856F91D7F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35C1CF80-BC18-49BC-B898-7856F91D7F8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DD80D030-5561-484A-88B0-DA8BB827ADED} = {8DC7E704-1971-4D45-BE61-FF280AE4DF18}
 		{19F284F5-A68B-4195-A4E5-97E340B1D3C9} = {518BBE69-4ACC-462B-B82A-679FDC122AA9}
 		{74302BBC-ED9E-4FBC-BC49-DC075B0BEB98} = {8DC7E704-1971-4D45-BE61-FF280AE4DF18}
 		{E422BDA6-A3A0-4D25-BC10-6EE1D8236232} = {8DC7E704-1971-4D45-BE61-FF280AE4DF18}
+		{35C1CF80-BC18-49BC-B898-7856F91D7F8A} = {518BBE69-4ACC-462B-B82A-679FDC122AA9}
 	EndGlobalSection
 EndGlobal
