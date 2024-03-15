@@ -2,36 +2,16 @@ name: draft-release
 on:
   push:
     tags:
-      - v*.**
+      - v*.*
 jobs:
   test:
     uses: ./.github/workflows/_test.yml
   build-artifacts:
-    runs-on: ubuntu-22.04
     needs: test
-    steps:
-      - name: ✅ Repository checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: ⚙️ Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: ./global.json
-      - name: 🛠️ Compile 'Release' configuration
-        run: ./build.sh CompileSrc --configuration Release
-      - name: 📦 Create NuGet packages
-        run: ./build.sh Pack ArtifactsPkg --configuration Release --skip CompileSrc
-      - name: 📤 Upload NuGet packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: packages
-          path: |
-            artifacts/pkg/*.nupkg
-            artifacts/pkg/*.snupkg
+    uses: ./.github/workflows/_build.yml
   draft-release:
     runs-on: ubuntu-22.04
-    needs: [test, build-artifacts]
+    needs: build-artifacts
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
