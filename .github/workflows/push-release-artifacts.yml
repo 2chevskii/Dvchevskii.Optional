@@ -17,8 +17,6 @@ jobs:
           - nuget_feed_name: github.com
             nuget_feed_url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
             nuget_api_key: GITHUB_TOKEN
-    env:
-      RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
