@@ -53,6 +53,15 @@
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
         },
+        "NugetApiKey": {
+          "type": "string"
+        },
+        "NugetFeedName": {
+          "type": "string"
+        },
+        "NugetFeedUrl": {
+          "type": "string"
+        },
         "Partition": {
           "type": "string",
           "description": "Partition to use on CI"
@@ -69,6 +78,9 @@
           }
         },
         "ReleaseAssets": {
+          "type": "string"
+        },
+        "ReleaseTagName": {
           "type": "string"
         },
         "Root": {
@@ -92,6 +104,9 @@
               "CoverageReport",
               "CreateReleaseDraft",
               "CreateVersionTag",
+              "DownloadReleaseAssets",
+              "EnsureHasNuGetSource",
+              "NuGetPush",
               "Pack",
               "Restore",
               "Test"
@@ -119,6 +134,9 @@
               "CoverageReport",
               "CreateReleaseDraft",
               "CreateVersionTag",
+              "DownloadReleaseAssets",
+              "EnsureHasNuGetSource",
+              "NuGetPush",
               "Pack",
               "Restore",
               "Test"

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using LibGit2Sharp;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
@@ -17,6 +18,9 @@ partial class Build
 {
     [Parameter]
     readonly string ReleaseAssets;
+
+    [Parameter]
+    readonly string ReleaseTagName;
     AbsolutePath ReleaseAssetsDirectory => RootDirectory / ReleaseAssets;
 
     Target CreateReleaseDraft =>
@@ -79,7 +83,7 @@ partial class Build
 
                             var uploadTask = GitHubTasks
                                 .GitHubClient.Repository.Release.UploadAsset(release, assetUpload)
-                                .ContinueWith(task =>
+                                .ContinueWith(_ =>
                                 {
                                     stream.Dispose();
                                     Log.Debug("Finished asset upload: {AssetPath}", assetPath);
@@ -129,6 +133,47 @@ partial class Build
                     }
                 );
             });
+
+    Target DownloadReleaseAssets =>
+        _ =>
+            _.Requires(() => !string.IsNullOrEmpty(ReleaseTagName))
+                .Executes(async () =>
+                {
+                    var repoId = await GetRepositoryId();
+                    var release = await GitHubTasks.GitHubClient.Repository.Release.Get(
+                        repoId,
+                        ReleaseTagName
+                    );
+
+                    Log.Information(
+                        "Got release {ReleaseName} on tag {TagName}",
+                        release.Name,
+                        release.TagName
+                    );
+
+                    Log.Verbose(
+                        "Release assets: {Assets}",
+                        release.Assets.Select(asset => asset.Name)
+                    );
+
+                    ReleaseAssetsDirectory.CreateOrCleanDirectory();
+
+                    Log.Information(
+                        "Downloading {AssetCount} assets to directory {ReleaseAssetDirectory}",
+                        release.Assets.Count,
+                        ReleaseAssetsDirectory
+                    );
+
+                    var downloadTasks = release.Assets.Select(
+                        asset =>
+                            HttpTasks.HttpDownloadFileAsync(
+                                asset.BrowserDownloadUrl,
+                                ReleaseAssetsDirectory / asset.Name
+                            )
+                    );
+
+                    await Task.WhenAll(downloadTasks);
+                });
 
     IReadOnlyCollection<AbsolutePath> GetReleaseAssets()
     {

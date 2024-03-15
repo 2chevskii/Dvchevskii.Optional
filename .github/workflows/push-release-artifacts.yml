@@ -1,0 +1,39 @@
+name: push-release-artifacts
+on:
+  release:
+    types: published
+jobs:
+  push-nuget:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - nuget_feed_name: nuget.org
+            nuget_feed_url: https://api.nuget.org/v3/index.json
+            nuget_api_key: NUGET_API_KEY
+          - nuget_feed_name: github.com
+            nuget_feed_url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+            nuget_api_key: GITHUB_TOKEN
+    env:
+      RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+    steps:
+      - name: ✅ Repository checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: ⚙️ Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: ./global.json
+      - name: 📥 Download release assets
+        run: ./build.sh DownloadReleaseAssets --release-assets artifacts/release --release-tag-name ${{ github.event.release.tag_name }}
+      - name: 🚚 Push packages to NuGet feed
+        run: >
+          ./build.sh NuGetPush
+          --release-assets artifacts/release
+          --nuget-feed-name ${{ matrix.nuget_feed_name }}
+          --nuget-feed-url '${{ matrix.nuget_feed_url }}'
+          --nuget-api-key ${{ secrets[matrix.nuget_api_key] }}

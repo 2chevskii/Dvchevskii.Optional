@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
 using Nuke.Common;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.GitVersion;
 using Serilog;
 
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 partial class Build : NukeBuild
 {
     // public static int Main() => Execute<Build>(x => x.Compile);

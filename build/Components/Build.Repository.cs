@@ -13,15 +13,28 @@ partial class Build
     [GitRepository, Required]
     GitRepository GitRepository;
 
-    Task<long> GetRepositoryId() =>
-        RepositoryId != 0L
-            ? Task.FromResult(RepositoryId)
-            : GitHubTasks
-                .GitHubClient.Repository.Get(
+    async Task<long> GetRepositoryId()
+    {
+        if (RepositoryId == 0L)
+        {
+            Log.Verbose(
+                "Fetching RepositoryId for repository {GitHubOwner}/{GitHubName}",
+                GitRepository.GetGitHubOwner(),
+                GitRepository.GetGitHubName()
+            );
+
+            RepositoryId = (
+                await GitHubTasks.GitHubClient.Repository.Get(
                     GitRepository.GetGitHubOwner(),
                     GitRepository.GetGitHubName()
                 )
-                .ContinueWith(task => RepositoryId = task.Result.Id);
+            ).Id;
+
+            Log.Verbose("RepositoryId: {RepositoryId}", RepositoryId);
+        }
+
+        return RepositoryId;
+    }
 
     void LoadRepository()
     {
