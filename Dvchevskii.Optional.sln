@@ -19,6 +19,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.EntityF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dvchevskii.Optional.Async.Tests", "test\Dvchevskii.Optional.Async.Tests\Dvchevskii.Optional.Async.Tests.csproj", "{35C1CF80-BC18-49BC-B898-7856F91D7F8A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props_targets", "props_targets", "{F803BE78-5E11-409A-B718-167A20FCBF18}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{57B911EC-DFCE-4944-8EA6-6AB962C7FD2A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		GitVersion.yml = GitVersion.yml
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{686600D1-32F3-443A-8E5B-8B92A6DE850E}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

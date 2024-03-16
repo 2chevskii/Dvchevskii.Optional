@@ -4,7 +4,7 @@
     <Authors>2CHEVSKII</Authors>
     <Copyright>Copyright (c) 2024 2CHEVSKII</Copyright>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/2chevskii/Dvchevskii.Optional.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/2chevskii/optional.git</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/2chevskii/optional/releases/tag/v$(Version)</PackageReleaseNotes>
   </PropertyGroup>
 
