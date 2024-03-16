@@ -13,4 +13,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="DbContextExtensions.cs" />
+    <None Include="DbContextExtensions.cs" />
+    <Compile Remove="DbSetExtensions.cs" />
+    <None Include="DbSetExtensions.cs" />
+    <Compile Remove="QueryableExtensions.cs" />
+    <None Include="QueryableExtensions.cs" />
+  </ItemGroup>
+
 </Project>
