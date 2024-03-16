@@ -1,4 +1,6 @@
-﻿#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+﻿using FluentAssertions;
+
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
 namespace Dvchevskii.Optional.Tests;
 
@@ -15,22 +17,22 @@ public class PatternMatchingTests
         _none = Option.None<int>();
     }
 
-    /*[TestMethod]
+    [TestMethod]
     public void Test_Match()
     {
         (
             _some switch
             {
-                ISome => 0,
-                INone => 1
+                Some<int> => 0,
+                None<int> => 1
             }
         ).Should().Be(0);
         (
             _none switch
             {
-                ISome => 0,
-                INone => 1
+                Some<int> => 0,
+                None<int> => 1
             }
         ).Should().Be(1);
-    }*/
+    }
 }

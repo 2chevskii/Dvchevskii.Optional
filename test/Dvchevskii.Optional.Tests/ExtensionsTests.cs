@@ -55,7 +55,6 @@ public class ExtensionsTests
         x.AsNone().Should().NotBe(new object());
         42.AsNone().Should().NotBe(42);
 
-        (x.AsNone() == null).Should().BeFalse();
         x.AsNone().Should().NotBeNull();
         x.AsNone().Should().NotBe(null);
     }

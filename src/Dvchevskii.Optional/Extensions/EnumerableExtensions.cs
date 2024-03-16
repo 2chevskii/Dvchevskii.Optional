@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+// ReSharper disable PossibleMultipleEnumeration
+
 namespace Dvchevskii.Optional.Extensions
 {
     public static class EnumerableExtensions

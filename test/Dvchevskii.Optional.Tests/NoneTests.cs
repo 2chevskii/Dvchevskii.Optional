@@ -152,7 +152,7 @@ public class NoneTests
     {
         bool predicateCalled = false;
         _testSubject
-            .Filter(x =>
+            .Filter(_ =>
             {
                 predicateCalled = true;
                 return false;
