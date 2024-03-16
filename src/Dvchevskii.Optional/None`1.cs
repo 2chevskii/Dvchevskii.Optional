@@ -66,5 +66,10 @@ namespace Dvchevskii.Optional
         public override bool Equals(T other) => other is Option option && Equals(option);
 
         public override int GetHashCode() => unchecked(typeof(None<>).GetHashCode() * 31 ^ 17);
+
+        public override string ToString()
+        {
+            return $"None<{UnderlyingType.Name}>()";
+        }
     }
 }
