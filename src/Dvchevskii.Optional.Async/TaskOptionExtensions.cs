@@ -9,6 +9,22 @@ namespace Dvchevskii.Optional.Async
     /// </summary>
     public static class TaskOptionExtensions
     {
+        public static Task<bool> IsSomeAsync(this Task<Option> self) =>
+            self.ContinueWith(
+                task => task.Status == TaskStatus.RanToCompletion && task.Result.IsSome
+            );
+
+        public static Task<bool> IsSomeAsync<T>(this Task<Option<T>> self) =>
+            self.MapOrAsync(_ => true, false);
+
+        public static Task<bool> IsNoneAsync(this Task<Option> self) =>
+            self.ContinueWith(
+                task => task.Status != TaskStatus.RanToCompletion || task.Result.IsNone
+            );
+
+        public static Task<bool> IsNoneAsync<T>(this Task<Option<T>> self) =>
+            self.MapOrAsync(_ => false, true);
+
         public static Task<T> UnwrapAsync<T>(this Task<Option<T>> self) =>
             self.ContinueWith(
                 task =>
