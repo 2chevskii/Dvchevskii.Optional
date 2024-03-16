@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>utility monads option functional async extensions</PackageTags>
+    <Description>Provides extension methods to easily handle working with Task&lt;Option&lt;T&gt;&gt;</Description>
   </PropertyGroup>
 
   <ItemGroup>
