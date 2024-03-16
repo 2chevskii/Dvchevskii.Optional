@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using Dvchevskii.Optional.Exceptions;
 
 // ReSharper disable InconsistentNaming
@@ -50,8 +47,11 @@ namespace Dvchevskii.Optional
 
         public abstract T UnwrapOrElse(Func<T> defaultValueFactory);
 
+#if !NULLABLE
         public abstract T UnwrapOrDefault();
-
+#else
+        public abstract T? UnwrapOrDefault();
+#endif
         public abstract Option<U> Map<U>(Func<T, U> mapper);
 
         public abstract U MapOr<U>(Func<T, U> mapper, U defaultValue);

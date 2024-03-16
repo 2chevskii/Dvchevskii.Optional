@@ -59,4 +59,13 @@ public class TaskOptionExtensionsTests
         (await Task.FromResult(Option.Some(42)).UnwrapOrAsync(69)).Should().Be(42);
         (await Task.FromResult(Option.None<int>()).UnwrapOrAsync(69)).Should().Be(69);
     }
+
+    [TestMethod]
+    public async Task Test_MapOrAsync()
+    {
+        var r1 = await Task.FromResult(Option.Some(42)).MapOrAsync(v => v * 2, 42 / 2);
+        var r2 = await Task.FromResult(Option.None<int>()).MapOrAsync(v => v * 2, 42 / 2);
+        r1.Should().Be(42 * 2);
+        r2.Should().Be(42 / 2);
+    }
 }

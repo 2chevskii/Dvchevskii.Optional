@@ -18,20 +18,22 @@ public class ExtensionsTests
     public void Test_WrapAll_DefaultAsNone_False()
     {
         int[] array = { 42, 69, 0 };
-        array
-            .WrapAll(defaultAsNone: false)
-            .Should()
-            .ContainInOrder(Option.Some(42), Option.Some(69), Option.Some(0));
+        array.WrapAll().Should().ContainInOrder(Option.Some(42), Option.Some(69), Option.Some(0));
     }
 
     [TestMethod]
-    public void Test_WrapAll_DefaultAsNone_True()
+    public void Test_WrapAllNullAsNone_Struct()
     {
-        int[] array = { 42, 69, 0 };
+        int?[] array = [42, 69, 0];
         array
-            .WrapAll(defaultAsNone: true)
+            .WrapAllNullAsNone()
             .Should()
-            .ContainInOrder(Option.Some(42), Option.Some(69), Option.None<int>());
+            .ContainInOrder(Option.Some<int?>(42), Option.Some<int?>(69), Option.Some<int?>(0));
+        int?[] array2 = [42, 69, null];
+        array2
+            .WrapAllNullAsNone()
+            .Should()
+            .ContainInOrder(Option.Some<int?>(42), Option.Some<int?>(69), Option.None<int?>());
     }
 
     [TestMethod]

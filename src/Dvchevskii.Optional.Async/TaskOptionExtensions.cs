@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Dvchevskii.Optional.Exceptions;
+// ReSharper disable InconsistentNaming
 
 namespace Dvchevskii.Optional.Async
 {

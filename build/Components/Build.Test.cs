@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Nuke.Common;
-using Nuke.Common.Git;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Serilog;
+
+// ReSharper disable AllUnderscoreLocalParameterName
 
 partial class Build
 {
@@ -50,10 +50,7 @@ partial class Build
                     .AddLoggers("console;verbosity=detailed")
                     .When(
                         HtmlTestResults,
-                        settings =>
-                            settings.AddLoggers(
-                                $"html;logfilename={project.Name}.html"
-                            )
+                        settings => settings.AddLoggers($"html;logfilename={project.Name}.html")
                     )
                     .When(
                         Host.IsGitHubActions(),

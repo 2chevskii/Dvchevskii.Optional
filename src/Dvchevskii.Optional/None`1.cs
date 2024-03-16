@@ -32,7 +32,11 @@ namespace Dvchevskii.Optional
 
         public override T UnwrapOrElse(Func<T> defaultValueFactory) => defaultValueFactory();
 
+#if !NULLABLE
         public override T UnwrapOrDefault() => default;
+#else
+        public override T? UnwrapOrDefault() => default;
+#endif
 
         public override Option<U> Map<U>(Func<T, U> mapper) => None<U>();
 
@@ -59,10 +63,17 @@ namespace Dvchevskii.Optional
 
         public None<R> ToType<R>() => Optional.None<R>.Instance;
 
+#if !NULLABLE
         public override bool Equals(object obj) => obj is Option option && option.IsNone;
+#else
+        public override bool Equals(object? obj) => obj is Option { IsNone: true };
+#endif
 
+#if !NULLABLE
         public override bool Equals(Option other) => other?.IsNone ?? false;
-
+#else
+        public override bool Equals(Option? other) => other?.IsNone ?? false;
+#endif
         public override bool Equals(T other) => other is Option option && Equals(option);
 
         public override int GetHashCode() => unchecked(typeof(None<>).GetHashCode() * 31 ^ 17);

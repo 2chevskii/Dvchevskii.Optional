@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+﻿#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
 namespace Dvchevskii.Optional.Tests;
 

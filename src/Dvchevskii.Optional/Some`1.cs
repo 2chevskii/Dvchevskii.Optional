@@ -49,22 +49,25 @@ namespace Dvchevskii.Optional
             optionBFactory(_value);
 
         public override Option<T> Filter(Predicate<T> predicate) =>
-            predicate(_value) ? (Option<T>)Some(_value) : None<T>();
+            predicate(_value) ? Some(_value) : None<T>();
 
         public override Option<T> Or(Option<T> optionB) => this;
 
         public override Option<T> OrElse(Func<Option<T>> optionBFactory) => this;
 
-        public override Option<T> XOr(Option<T> optionB) =>
-            optionB.IsSome ? (Option<T>)None<T>() : this;
+        public override Option<T> XOr(Option<T> optionB) => optionB.IsSome ? None<T>() : this;
 
         public override Option<(T, U)> Zip<U>(Option<U> other) =>
-            other.IsNone ? (Option<(T, U)>)None<(T, U)>() : Some((Unwrap(), other.Unwrap()));
+            other.IsNone ? None<(T, U)>() : Some((Unwrap(), other.Unwrap()));
 
         public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func) =>
-            other.IsNone ? (Option<R>)None<R>() : Some(func(Unwrap(), other.Unwrap()));
+            other.IsNone ? None<R>() : Some(func(Unwrap(), other.Unwrap()));
 
+#if NULLABLE
+        public override bool Equals(object? obj)
+#else
         public override bool Equals(object obj)
+#endif
         {
             if (obj is T value)
             {
@@ -84,7 +87,11 @@ namespace Dvchevskii.Optional
             return false;
         }
 
+        #if NULLABLE
+        public override bool Equals(Option? other)
+        #else
         public override bool Equals(Option other)
+        #endif
         {
             if (other == null)
             {
@@ -96,7 +103,11 @@ namespace Dvchevskii.Optional
                 return false;
             }
 
+            #if NULLABLE
+            return ((Option<T>)other).Unwrap()!.Equals(_value);
+            #else
             return ((Option<T>)other).Unwrap().Equals(_value);
+            #endif
         }
 
         public override bool Equals(T other)

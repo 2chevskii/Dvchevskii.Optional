@@ -16,34 +16,30 @@ namespace Dvchevskii.Optional.Extensions
             where option.IsSome
             select option.Unwrap();
 
-        /// <summary>
-        /// Wraps all entries in collection to Options
-        /// </summary>
-        /// <param name="enumerable">The collection</param>
-        /// <param name="defaultAsNone">
-        /// If true - entries which are equal to their type's default value (i.e. null for reference types) will be wrapped as None.
-        /// If false - all output Options will be Some
-        /// </param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static IEnumerable<Option<T>> WrapAll<T>(
-            this IEnumerable<T> enumerable,
-            bool defaultAsNone = false
-        )
-        {
-            foreach (T item in enumerable)
-            {
-                if (defaultAsNone)
-                {
-                    bool isDefault = item.Equals(default(T));
-                    if (isDefault)
-                    {
-                        yield return Option.None<T>();
-                    }
-                }
+        public static IEnumerable<Option<T>> OnlySome<T>(this IEnumerable<Option<T>> enumerable) =>
+            enumerable.Where(option => option.IsSome);
 
-                yield return Option.Some(item);
-            }
-        }
+#if NULLABLE
+        public static IEnumerable<Option<T>> WrapAllNullAsNone<T>(
+            this IEnumerable<T?> enumerable
+        ) =>
+            enumerable.Select(entry => Equals(entry, null) ? Option.None<T>() : Option.Some(entry));
+
+        public static IEnumerable<Option<T?>> WrapAll<T>(this IEnumerable<T?> enumerable) =>
+            enumerable.Select(Option.Some);
+#else
+        public static IEnumerable<Option<T>> WrapAll<T>(this IEnumerable<T> enumerable) =>
+            enumerable.Select(Option.Some);
+
+        public static IEnumerable<Option<T>> WrapAllNullAsNone<T>(this IEnumerable<T> enumerable)
+            where T : class =>
+            enumerable.Select(entry => entry == null ? Option.None<T>() : Option.Some(entry));
+
+        public static IEnumerable<Option<T>> WrapAllNullAsNone<T>(this IEnumerable<T?> enumerable)
+            where T : struct =>
+            enumerable.Select(
+                entry => entry.HasValue ? Option.Some(entry.Value) : Option.None<T>()
+            );
+#endif
     }
 }

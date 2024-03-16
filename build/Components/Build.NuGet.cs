@@ -7,6 +7,8 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 
+// ReSharper disable AllUnderscoreLocalParameterName
+
 partial class Build
 {
     [Parameter]
@@ -78,6 +80,7 @@ partial class Build
 
 class NuGetSource
 {
+    // ReSharper disable once InconsistentNaming
     static readonly Regex s_ParsePattern = new Regex(
         @"\d+\.\s+([^\s]+)\s\[(Enabled|Disabled)\]\n\s+([^\s]+)"
     );

@@ -14,10 +14,4 @@ public class NullableExtensionsTests
         new float?(69.0f).AsOption().IsSome.Should().BeTrue();
         new bool?().AsOption().IsSome.Should().BeFalse();
     }
-
-    private static T? AsNullable<T>(T? val)
-        where T : struct
-    {
-        return val;
-    }
 }

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Nuke.Common;
-using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.ReportGenerator;
+
+// ReSharper disable AllUnderscoreLocalParameterName
 
 [Requires<CoverletTasks>(Version = "6.0.1")]
 [Requires<ReportGeneratorTasks>(Version = "5.2.2")]
@@ -40,13 +40,12 @@ partial class Build
                             settings =>
                                 settings
                                     .SetReports(
-                                        TestProjects
-                                            .Select(
-                                                project =>
-                                                    ArtifactPaths
-                                                        .GetProjectCoverageOutputPath(project)
-                                                        .ToString()
-                                            )
+                                        TestProjects.Select(
+                                            project =>
+                                                ArtifactPaths
+                                                    .GetProjectCoverageOutputPath(project)
+                                                    .ToString()
+                                        )
                                     )
                                     .SetTargetDirectory(ArtifactPaths.CoverageHtmlReport)
                         )

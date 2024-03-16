@@ -34,14 +34,10 @@ public class NoneTests
 
         bool predicateCalled = false;
 
-        Predicate<int> predicate = _ =>
-        {
-            predicateCalled = true;
-            return false;
-        };
-
-        _testSubject.IsSomeAnd(predicate).Should().BeFalse();
+        _testSubject.IsSomeAnd(Predicate).Should().BeFalse();
         predicateCalled.Should().BeFalse();
+
+        bool Predicate(int _) => predicateCalled = true;
     }
 
     [TestMethod]

@@ -29,5 +29,6 @@ partial class Build
 
 file static class Constants
 {
+    // ReSharper disable once InconsistentNaming
     public const string BIN = "bin";
 }
