@@ -115,5 +115,10 @@ namespace Dvchevskii.Optional
                     * (_value?.GetHashCode() ?? 1)
                 ^ 23
             );
+
+        public override string ToString()
+        {
+            return $"Some<{UnderlyingType.Name}>({_value})";
+        }
     }
 }
