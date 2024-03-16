@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Dvchevskii.Optional.Async;
 using Dvchevskii.Optional.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,6 @@ public static class DbSetExtensions
     {
         return set.FindAsync(keyValues)
             .AsTask()
-            .ContinueWith(task => task.Result.AsOption());
+            .AsOptionAsync();
     }
 }

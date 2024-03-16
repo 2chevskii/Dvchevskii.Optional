@@ -21,8 +21,7 @@ public static class DbContextExtensions
         this DbContext dbContext,
         params object[] keyValues
     )
-        where T : class =>
-        dbContext.FindAsync<T>(keyValues).AsTask().ContinueWith(task => task.Result.AsOption());
+        where T : class => dbContext.FindAsync<T>(keyValues).AsTask().AsOptionAsync();
 
     public static Task<Option> FindOrNoneAsync(
         this DbContext dbContext,
