@@ -8,6 +8,11 @@
     <WarningsAsErrors>CS8625;CS8602</WarningsAsErrors>
     <PackageTags>utility monads option functional</PackageTags>
     <Description>Provides utility type Option&lt;T&gt; for optional value handling</Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dvchevskii.Unit" Version="1.0.5" />
+  </ItemGroup>
 
 </Project>
