@@ -56,7 +56,17 @@ namespace Dvchevskii.Optional.Extensions
 
         public static Func<Option<TResult>, Exception> MakeSafe<TResult>(this Func<TResult> func)
         {
+            throw new NotImplementedException();
+        }
 
+        public static Option<TResult> Apply<T1, TResult>(this Func<T1, TResult> func, Option<T1> arg0)
+        {
+            if (arg0.IsNone)
+            {
+                return Option.None<TResult>();
+            }
+
+            return Option.Some(func(arg0.Unwrap()));
         }
     }
 }
