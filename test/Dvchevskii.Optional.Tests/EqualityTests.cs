@@ -31,7 +31,30 @@ public class EqualityTests
             [Option.Some(new object()), Option.Some<object?>(null)],
             [Option.Some(new object()), null],
             [Option.Some("test"), Option.Some("test2")],
-            [Option.Some(42f), Option.Some(43f)]
+            [Option.Some(42f), Option.Some(43f)],
+            [Option.None<object?>(), Option.Some<object?>(null)],
+        };
+
+    public static object[][] TestData_Operators_Equal =>
+        new object[][]
+        {
+            [Option.Some(42), Option.Some(42)],
+            [Option.Some(true), Option.Some(true)],
+            [Option.Some(false), Option.Some(false)],
+            [Option.Some(42f), Option.Some(42f)],
+            [Option.Some("test"), Option.Some("test")],
+            [Option.Some<object?>(null), Option.Some<object?>(null)],
+            [Option.None<int>(), Option.None<int>()],
+            [Option.None<bool>(), Option.None<object>()],
+        };
+    public static object[][] TestData_Operators_NotEqual =>
+        new object[][]
+        {
+            [Option.Some(42), Option.Some(69)],
+            [Option.Some(true), Option.Some(false)],
+            [Option.Some(true), Option.None<bool>()],
+            [Option.Some<object?>(null), Option.Some(new object())],
+            [Option.Some(42f), Option.Some(69f)]
         };
 
     [DataTestMethod]
@@ -166,5 +189,33 @@ public class EqualityTests
             .Default.GetHashCode(Option.Some(69))
             .Should()
             .NotBe(OptionEqualityComparer<int>.Default.GetHashCode(Option.Some(42)));
+    }
+
+    [DataTestMethod]
+    [DynamicData(nameof(TestData_Operators_Equal))]
+    public void Test_Option_OpEqual_True(Option lhs, Option rhs)
+    {
+        (lhs == rhs).Should().BeTrue();
+    }
+
+    [DataTestMethod]
+    [DynamicData(nameof(TestData_Operators_NotEqual))]
+    public void Test_Option_OpEqual_False(Option lhs, Option rhs)
+    {
+        (lhs == rhs).Should().BeFalse();
+    }
+
+    [DataTestMethod]
+    [DynamicData(nameof(TestData_Operators_NotEqual))]
+    public void Test_Option_OpNotEqual_True(Option lhs, Option rhs)
+    {
+        (lhs != rhs).Should().BeTrue();
+    }
+
+    [DataTestMethod]
+    [DynamicData(nameof(TestData_Operators_Equal))]
+    public void Test_Option_OpNotEqual_False(Option lhs, Option rhs)
+    {
+        (lhs != rhs).Should().BeFalse();
     }
 }
