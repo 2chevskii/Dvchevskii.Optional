@@ -13,7 +13,7 @@ namespace Dvchevskii.Optional
                 return ReferenceEquals(rhs, null) || rhs.IsSome && ReferenceEquals(rhs.Unwrap(), null);
             }
 
-            if (rhs is null)
+            if (ReferenceEquals(rhs, null))
             {
                 return lhs.IsSome && ReferenceEquals(lhs.Unwrap(), null);
             }
@@ -41,14 +41,10 @@ namespace Dvchevskii.Optional
                 return OptionEqualityComparer.NONE_HASHCODE;
             }
 
-            unchecked
-            {
-                int hash = OptionEqualityComparer.NONE_HASHCODE;
-
-                hash = hash * 23 * obj.UnderlyingType.GetHashCode();
-
-                return hash * (EqualityComparer<T>.Default.GetHashCode(obj.Unwrap()) + 3);
-            }
+            int hash = 17;
+            hash = hash * 23 + obj.UnderlyingType.GetHashCode();
+            hash = hash * 23 + EqualityComparer<T>.Default.GetHashCode(obj.Unwrap());
+            return hash;
         }
     }
 }

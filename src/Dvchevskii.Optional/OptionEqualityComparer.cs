@@ -42,14 +42,11 @@ namespace Dvchevskii.Optional
             {
                 return NONE_HASHCODE;
             }
-            unchecked
-            {
-                int hash = NONE_HASHCODE;
 
-                hash = hash * 23 * obj.UnderlyingType.GetHashCode();
-
-                return hash * (EqualityComparer<object>.Default.GetHashCode(obj.UnwrapAny()) + 3);
-            }
+            int hash = 17;
+            hash = hash * 23 + obj.UnderlyingType.GetHashCode();
+            hash = hash * 23 + EqualityComparer<object>.Default.GetHashCode(obj.UnwrapAny());
+            return hash;
         }
     }
 }

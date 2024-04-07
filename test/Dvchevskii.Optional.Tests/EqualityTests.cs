@@ -1,5 +1,6 @@
-﻿using System.Net.Sockets;
-using FluentAssertions;
+﻿using FluentAssertions;
+
+// ReSharper disable InconsistentNaming
 
 namespace Dvchevskii.Optional.Tests;
 
@@ -56,7 +57,10 @@ public class EqualityTests
             .Should()
             .BeTrue();
         var vObject = new object();
-        OptionEqualityComparer<object>.Default.Equals(Option.Some(vObject), Option.Some(vObject));
+        OptionEqualityComparer<object>
+            .Default.Equals(Option.Some(vObject), Option.Some(vObject))
+            .Should()
+            .BeTrue();
         object? vNull = null;
         OptionEqualityComparer<object?>
             .Default.Equals(Option.Some(vNull), Option.Some(vNull))
@@ -72,5 +76,95 @@ public class EqualityTests
     public void Test_EqualityComparer_NotEqual(Option lhs, Option rhs)
     {
         OptionEqualityComparer.Default.Equals(lhs, rhs).Should().BeFalse();
+    }
+
+    [TestMethod]
+    public void Test_EqualityComparer_Generic_NotEqual()
+    {
+        OptionEqualityComparer<int>
+            .Default.Equals(Option.Some(42), Option.Some(24))
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<int>
+            .Default.Equals(Option.Some(42), Option.None<int>())
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<int>
+            .Default.Equals(Option.None<int>(), Option.Some(42))
+            .Should()
+            .BeFalse();
+
+        OptionEqualityComparer<string>
+            .Default.Equals(Option.Some("hello"), Option.Some("world"))
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<string>
+            .Default.Equals(Option.Some("hello"), Option.None<string>())
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<string>
+            .Default.Equals(Option.None<string>(), Option.Some("hello"))
+            .Should()
+            .BeFalse();
+
+        OptionEqualityComparer<bool>
+            .Default.Equals(Option.Some(true), Option.Some(false))
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<bool>
+            .Default.Equals(Option.Some(true), Option.None<bool>())
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<bool>
+            .Default.Equals(Option.None<bool>(), Option.Some(true))
+            .Should()
+            .BeFalse();
+
+        OptionEqualityComparer<double>
+            .Default.Equals(Option.Some(3.14), Option.Some(2.71))
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<double>
+            .Default.Equals(Option.Some(3.14), Option.None<double>())
+            .Should()
+            .BeFalse();
+        OptionEqualityComparer<double>
+            .Default.Equals(Option.None<double>(), Option.Some(3.14))
+            .Should()
+            .BeFalse();
+    }
+
+    [TestMethod]
+    public void Test_EqualityComparer_GetHashCode()
+    {
+        var cmp = OptionEqualityComparer.Default;
+        cmp.GetHashCode(Option.Some(42)).Should().Be(cmp.GetHashCode(Option.Some(42)));
+        cmp.GetHashCode(Option.Some(false)).Should().Be(cmp.GetHashCode(Option.Some(false)));
+        cmp.GetHashCode(Option.Some(false)).Should().NotBe(cmp.GetHashCode(Option.Some(true)));
+        cmp.GetHashCode(Option.Some(false)).Should().NotBe(cmp.GetHashCode(Option.Some(42)));
+    }
+
+    [TestMethod]
+    public void Test_EqualityComparer_Generic_GetHashCode()
+    {
+        OptionEqualityComparer<bool>
+            .Default.GetHashCode(Option.Some(true))
+            .Should()
+            .Be(OptionEqualityComparer<bool>.Default.GetHashCode(Option.Some(true)));
+
+        OptionEqualityComparer<int>
+            .Default.GetHashCode(Option.Some(42))
+            .Should()
+            .Be(OptionEqualityComparer<int>.Default.GetHashCode(Option.Some(42)));
+
+        OptionEqualityComparer<float>
+            .Default.GetHashCode(Option.Some(42f))
+            .Should()
+            .Be(OptionEqualityComparer<float>.Default.GetHashCode(Option.Some(42f)));
+
+        OptionEqualityComparer<int>
+            .Default.GetHashCode(Option.Some(69))
+            .Should()
+            .NotBe(OptionEqualityComparer<int>.Default.GetHashCode(Option.Some(42)));
     }
 }
