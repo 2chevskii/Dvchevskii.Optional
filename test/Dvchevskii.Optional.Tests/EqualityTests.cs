@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 
 // ReSharper disable InconsistentNaming
 
@@ -217,5 +218,25 @@ public class EqualityTests
     public void Test_Option_OpNotEqual_False(Option lhs, Option rhs)
     {
         (lhs != rhs).Should().BeFalse();
+    }
+
+    [TestMethod]
+    [SuppressMessage("ReSharper", "EqualExpressionComparison")]
+    public void Test_Option_Generic_OpEqual_True()
+    {
+        (Option.Some(42) == Option.Some(42)).Should().BeTrue();
+        (Option.Some(42f) == Option.Some(42f)).Should().BeTrue();
+        (Option.Some<double>(42) == Option.Some(42d)).Should().BeTrue();
+        (Option.Some(false) == Option.Some(false)).Should().BeTrue();
+        var obj = new object();
+        (Option.Some(obj) == Option.Some(obj)).Should().BeTrue();
+        (Option.Some("test") == Option.Some("test")).Should().BeTrue();
+        (Option.Some("__test__") == "__test__").Should().BeTrue();
+        (true == Option.Some(true)).Should().BeTrue();
+    }
+
+    public void Test_Option_Generic_OpEqual_False()
+    {
+
     }
 }

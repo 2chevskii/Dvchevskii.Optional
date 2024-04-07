@@ -34,6 +34,16 @@ namespace Dvchevskii.Optional
             return EqualityComparer<T>.Default.Equals(lhsValue, rhsValue);
         }
 
+        public bool Equals(Option<T> lhs, T rhs)
+        {
+            if (lhs.IsNone)
+            {
+                return false;
+            }
+
+            return EqualityComparer<T>.Default.Equals(lhs.Unwrap(), rhs);
+        }
+
         public int GetHashCode(Option<T> obj)
         {
             if (obj.IsNone)
