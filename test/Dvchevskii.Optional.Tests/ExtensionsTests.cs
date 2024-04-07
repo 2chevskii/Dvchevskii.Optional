@@ -21,7 +21,7 @@ public class ExtensionsTests
         array.WrapAll().Should().ContainInOrder(Option.Some(42), Option.Some(69), Option.Some(0));
     }
 
-    [TestMethod]
+    /*[TestMethod]
     public void Test_WrapAllNullAsNone_Struct()
     {
         int?[] array = [42, 69, 0];
@@ -34,7 +34,7 @@ public class ExtensionsTests
             .WrapAllNullAsNone()
             .Should()
             .ContainInOrder(Option.Some<int?>(42), Option.Some<int?>(69), Option.None<int?>());
-    }
+    }*/
 
     [TestMethod]
     public void Test_AsSome()

@@ -4,10 +4,6 @@ namespace Dvchevskii.Optional.Extensions
 {
     public static class FunctionWrappersExtensions
     {
-        public static unsafe Option<Unit.Unit> CallSafe(delegate*<void> action)
-        {
-            throw new NotImplementedException();
-        }
 
         public static Option<Unit.Unit> CallSafe(this Action action)
         {

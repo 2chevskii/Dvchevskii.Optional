@@ -4,7 +4,7 @@ using Dvchevskii.Optional.Exceptions;
 // ReSharper disable InconsistentNaming
 namespace Dvchevskii.Optional
 {
-    public abstract class Option<T> : Option, IEquatable<T>
+    public abstract partial class Option<T> : Option, IEquatable<T>
     {
         public override Type UnderlyingType => typeof(T);
 
@@ -75,5 +75,7 @@ namespace Dvchevskii.Optional
         public abstract Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func);
 
         public abstract bool Equals(T other);
+
+        public override object UnwrapAny() => Unwrap();
     }
 }
