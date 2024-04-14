@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dvchevskii.Unit" Version="1.0.5" />
+    <Compile Remove="Extensions\FunctionWrappersExtensions.cs" />
+    <None Include="Extensions\FunctionWrappersExtensions.cs" />
   </ItemGroup>
+
+<!--  <ItemGroup>-->
+<!--    <PackageReference Include="Dvchevskii.Unit" Version="1.0.5" />-->
+<!--  </ItemGroup>-->
 
 </Project>
