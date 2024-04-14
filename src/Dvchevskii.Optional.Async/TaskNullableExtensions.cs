@@ -14,16 +14,6 @@ namespace Dvchevskii.Optional.Async
                         : Option.None<T>()
             );
 
-#if NULLABLE
-        public static Task<Option<T>> AsOptionAsync<T>(this Task<T?> self)
-            where T : class =>
-            self.ContinueWith(
-                task =>
-                    task.Status == TaskStatus.RanToCompletion
-                        ? task.Result.AsOption()
-                        : Option.None<T>()
-            );
-#else
         public static Task<Option<T>> AsOptionAsync<T>(this Task<T> self)
             where T : class =>
             self.ContinueWith(
@@ -32,6 +22,5 @@ namespace Dvchevskii.Optional.Async
                         ? task.Result.AsOption()
                         : Option.None<T>()
             );
-#endif
     }
 }

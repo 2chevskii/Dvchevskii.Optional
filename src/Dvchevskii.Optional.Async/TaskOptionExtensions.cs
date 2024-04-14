@@ -43,11 +43,7 @@ namespace Dvchevskii.Optional.Async
                         : Option.None<T>().UnwrapOr(defaultValue)
             );
 
-#if NULLABLE
-        public static Task<T?> UnwrapOrDefaultAsync<T>(this Task<Option<T>> self) =>
-#else
         public static Task<T> UnwrapOrDefaultAsync<T>(this Task<Option<T>> self) =>
-#endif
             self.ContinueWith(
                 task =>
                     task.Status == TaskStatus.RanToCompletion
