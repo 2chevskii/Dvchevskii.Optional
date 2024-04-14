@@ -50,7 +50,7 @@ public class TaskOptionExtensionsTests
         await Task.FromResult(Option.None<int>())
             .Awaiting((Func<Task<Option<int>>, ValueTask>)(async t => await t.UnwrapAsync()))
             .Should()
-            .ThrowAsync<ExpectNoneException>();
+            .ThrowAsync<OptionNoneException>();
     }
 
     [TestMethod]

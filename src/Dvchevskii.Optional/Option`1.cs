@@ -45,10 +45,10 @@ namespace Dvchevskii.Optional
         public abstract Option<T> Inspect(Action<T> inspector);
 
         /// <summary>
-        /// Unwraps a value if option is Some, or throws a <see cref="ExpectNoneException"/> with given message
+        /// Unwraps a value if option is Some, or throws a <see cref="OptionNoneException"/> with given message
         /// </summary>
         /// <param name="message"></param>
-        /// <exception cref="ExpectNoneException">Option has no value</exception>
+        /// <exception cref="OptionNoneException">Option has no value</exception>
         /// <returns></returns>
         public abstract T Expect(string message);
 

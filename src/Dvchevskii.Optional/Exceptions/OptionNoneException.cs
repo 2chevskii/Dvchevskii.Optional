@@ -2,16 +2,11 @@
 
 namespace Dvchevskii.Optional.Exceptions
 {
-    public sealed class OptionIsNoneException : Exception
+    public sealed class OptionNoneException : InvalidOperationException
     {
-        public OptionIsNoneException()
-        {
+        public OptionNoneException() { }
 
-        }
-
-        public OptionIsNoneException(string message) : base(message)
-        {
-
-        }
+        public OptionNoneException(string message)
+            : base(message) { }
     }
 }

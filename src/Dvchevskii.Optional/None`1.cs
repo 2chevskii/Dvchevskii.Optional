@@ -29,9 +29,9 @@ namespace Dvchevskii.Optional
 
         public override Option<T> Inspect(Action<T> inspector) => this;
 
-        public override T Expect(string message) => throw new ExpectNoneException(message);
+        public override T Expect(string message) => throw new OptionNoneException(message);
 
-        public override T Unwrap() => Expect("Option is none");
+        public override T Unwrap() => throw new OptionNoneException();
 
         public override T UnwrapOr(T defaultValue) => defaultValue;
 

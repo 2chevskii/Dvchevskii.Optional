@@ -82,7 +82,7 @@ namespace Dvchevskii.Optional.Async
             self.ContinueWith(
                 task =>
                     task.Status != TaskStatus.RanToCompletion
-                        ? throw new ExpectNoneException(message)
+                        ? throw new OptionNoneException(message)
                         : task.Result.Expect(message)
             );
 
