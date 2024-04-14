@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Dvchevskii.Optional.Extensions;
 
 namespace Dvchevskii.Optional.Async

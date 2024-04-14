@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Dvchevskii.Optional.Exceptions;
 
 // ReSharper disable InconsistentNaming

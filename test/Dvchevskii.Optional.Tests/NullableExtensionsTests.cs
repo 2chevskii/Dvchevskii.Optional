@@ -1,4 +1,4 @@
-﻿using Dvchevskii.Optional.Extensions;
+using Dvchevskii.Optional.Extensions;
 using FluentAssertions;
 
 namespace Dvchevskii.Optional.Tests;

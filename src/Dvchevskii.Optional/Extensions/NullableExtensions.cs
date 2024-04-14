@@ -1,4 +1,4 @@
-﻿namespace Dvchevskii.Optional.Extensions
+namespace Dvchevskii.Optional.Extensions
 {
     public static class NullableExtensions
     {

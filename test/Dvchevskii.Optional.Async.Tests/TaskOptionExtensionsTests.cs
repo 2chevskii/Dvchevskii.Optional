@@ -1,4 +1,4 @@
-﻿using Dvchevskii.Optional.Exceptions;
+using Dvchevskii.Optional.Exceptions;
 using FluentAssertions;
 
 namespace Dvchevskii.Optional.Async.Tests;

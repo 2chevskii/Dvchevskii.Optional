@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Dvchevskii.Optional.Async;
 using Dvchevskii.Optional.Extensions;
 using Microsoft.EntityFrameworkCore;
