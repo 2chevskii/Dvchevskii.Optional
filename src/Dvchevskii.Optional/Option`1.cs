@@ -1,14 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Dvchevskii.Optional.Exceptions;
 
 // ReSharper disable InconsistentNaming
 namespace Dvchevskii.Optional
 {
-    public abstract partial class Option<T> : Option, IEquatable<T>
+    public abstract class Option<T> : Option, IEquatable<Option<T>>, IEquatable<T>
     {
         public override Type UnderlyingType => typeof(T);
 
-        protected internal Option() { }
+        private protected Option() { }
+
+        public static bool operator ==(Option<T> lhs, Option<T> rhs) =>
+            OptionEqualityComparer<T>.Default.Equals(lhs, rhs);
+
+        public static bool operator !=(Option<T> lhs, Option<T> rhs) =>
+            !OptionEqualityComparer<T>.Default.Equals(lhs, rhs);
+
+        public static bool operator ==(Option<T> lhs, T rhs) =>
+            OptionEqualityComparer<T>.Default.Equals(lhs, rhs);
+
+        public static bool operator !=(Option<T> lhs, T rhs) =>
+            !OptionEqualityComparer<T>.Default.Equals(lhs, rhs);
+
+        public static bool operator ==(T lhs, Option<T> rhs) =>
+            OptionEqualityComparer<T>.Default.Equals(rhs, lhs);
+
+        public static bool operator !=(T lhs, Option<T> rhs) =>
+            !OptionEqualityComparer<T>.Default.Equals(rhs, lhs);
 
         /// <summary>
         /// Check if <see cref="Option{T}"/> contains a value and it matches the <paramref name="predicate"/>
@@ -47,11 +67,7 @@ namespace Dvchevskii.Optional
 
         public abstract T UnwrapOrElse(Func<T> defaultValueFactory);
 
-#if !NULLABLE
         public abstract T UnwrapOrDefault();
-#else
-        public abstract T? UnwrapOrDefault();
-#endif
         public abstract Option<U> Map<U>(Func<T, U> mapper);
 
         public abstract U MapOr<U>(Func<T, U> mapper, U defaultValue);
@@ -74,8 +90,16 @@ namespace Dvchevskii.Optional
 
         public abstract Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func);
 
-        public abstract bool Equals(T other);
+        public virtual bool Equals(Option<T> other) => OptionEqualityComparer<T>.Default.Equals(this, other);
 
-        public override object UnwrapAny() => Unwrap();
+        public virtual bool Equals(T value) => OptionEqualityComparer<T>.Default.Equals(this, value);
+
+        public override bool Equals(object obj) => OptionEqualityComparer<T>.Default.Equals(this, obj);
+
+        public override bool Equals(Option other) => OptionEqualityComparer<T>.Default.Equals(this, other);
+
+        public override int GetHashCode() => OptionEqualityComparer<T>.Default.GetHashCode(this);
+
+        internal override object UnwrapAny() => Unwrap();
     }
 }

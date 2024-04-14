@@ -9,6 +9,11 @@ namespace Dvchevskii.Optional
      * NOTE: All Nones are equal, no matter the <T>'s type
      * This is done so because we don't have smart enums in c# =(
      */
+
+    /// <summary>
+    /// Represents an <see cref="Option"/> which does not hold a value
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class None<T> : Option<T>
     {
         private static readonly None<T> Instance = new None<T>();
@@ -32,11 +37,7 @@ namespace Dvchevskii.Optional
 
         public override T UnwrapOrElse(Func<T> defaultValueFactory) => defaultValueFactory();
 
-#if !NULLABLE
         public override T UnwrapOrDefault() => default;
-#else
-        public override T? UnwrapOrDefault() => default;
-#endif
 
         public override Option<U> Map<U>(Func<T, U> mapper) => None<U>();
 
@@ -62,21 +63,6 @@ namespace Dvchevskii.Optional
         public override Option<R> ZipWith<U, R>(Option<U> other, Func<T, U, R> func) => None<R>();
 
         public None<R> ToType<R>() => Optional.None<R>.Instance;
-
-#if !NULLABLE
-        public override bool Equals(object obj) => obj is Option option && option.IsNone;
-#else
-        public override bool Equals(object? obj) => obj is Option { IsNone: true };
-#endif
-
-#if !NULLABLE
-        public override bool Equals(Option other) => other?.IsNone ?? false;
-#else
-        public override bool Equals(Option? other) => other?.IsNone ?? false;
-#endif
-        public override bool Equals(T other) => other is Option option && Equals(option);
-
-        public override int GetHashCode() => unchecked(typeof(None<>).GetHashCode() * 31 ^ 17);
 
         public override string ToString()
         {

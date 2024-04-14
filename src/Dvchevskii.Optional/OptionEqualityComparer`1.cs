@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dvchevskii.Optional
 {
@@ -10,7 +11,12 @@ namespace Dvchevskii.Optional
         {
             if (ReferenceEquals(lhs, null))
             {
-                return ReferenceEquals(rhs, null) || rhs.IsSome && ReferenceEquals(rhs.Unwrap(), null);
+                if (ReferenceEquals(rhs, null))
+                {
+                    return true;
+                }
+
+                return rhs.IsSome && ReferenceEquals(rhs.Unwrap(), null);
             }
 
             if (ReferenceEquals(rhs, null))
@@ -18,14 +24,14 @@ namespace Dvchevskii.Optional
                 return lhs.IsSome && ReferenceEquals(lhs.Unwrap(), null);
             }
 
-            if (lhs.IsSome != rhs.IsSome)
-            {
-                return false;
-            }
-
             if (lhs.IsNone)
             {
-                return true;
+                return rhs.IsNone;
+            }
+
+            if (rhs.IsNone)
+            {
+                return lhs.IsNone;
             }
 
             T lhsValue = lhs.Unwrap();
@@ -34,14 +40,96 @@ namespace Dvchevskii.Optional
             return EqualityComparer<T>.Default.Equals(lhsValue, rhsValue);
         }
 
+        public bool Equals(Option<T> lhs, Option rhs)
+        {
+            if (rhs is Option<T> rhsT)
+            {
+                return Equals(lhs, rhsT);
+            }
+
+            if (ReferenceEquals(lhs, null))
+            {
+                if (ReferenceEquals(rhs, null))
+                {
+                    return true;
+                }
+
+                return rhs.IsSome && ReferenceEquals(rhs.UnwrapAny(), null);
+            }
+
+            if (ReferenceEquals(rhs, null))
+            {
+                return lhs.IsSome && ReferenceEquals(lhs.Unwrap(), null);
+            }
+
+            if (lhs.IsNone)
+            {
+                return rhs.IsNone;
+            }
+
+            if (rhs.IsNone)
+            {
+                return lhs.IsNone;
+            }
+
+            T lhsValue = lhs.Unwrap();
+            object rhsValue = rhs.UnwrapAny();
+
+            if (rhsValue is T rhsValueT)
+            {
+                return Equals(lhs, rhsValueT);
+            }
+
+            return EqualityComparer<object>.Default.Equals(lhsValue, rhsValue);
+        }
+
         public bool Equals(Option<T> lhs, T rhs)
         {
+            if (ReferenceEquals(lhs, null))
+            {
+                if (ReferenceEquals(rhs, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (ReferenceEquals(rhs, null))
+            {
+                return lhs.IsSome && ReferenceEquals(lhs.Unwrap(), null);
+            }
+
             if (lhs.IsNone)
             {
                 return false;
             }
 
-            return EqualityComparer<T>.Default.Equals(lhs.Unwrap(), rhs);
+            var lhsValue = lhs.Unwrap();
+
+            return EqualityComparer<T>.Default.Equals(lhsValue, rhs);
+        }
+
+        public bool Equals(Option<T> lhs, object rhs)
+        {
+            switch (rhs)
+            {
+                case Option<T> rhsOptionT:
+                    return Equals(lhs, rhsOptionT);
+                case Option rhsOption:
+                    return Equals(lhs, rhsOption);
+                case T rhsT:
+                    return Equals(lhs, rhsT);
+            }
+
+            if (ReferenceEquals(lhs, null))
+            {
+                return ReferenceEquals(rhs, null);
+            }
+
+            T lhsValue = lhs.Unwrap();
+
+            return EqualityComparer<object>.Default.Equals(lhsValue, rhs);
         }
 
         public int GetHashCode(Option<T> obj)

@@ -11,8 +11,12 @@ namespace Dvchevskii.Optional
         {
             if (ReferenceEquals(lhs, null))
             {
-                return ReferenceEquals(rhs, null)
-                    || rhs.IsSome && ReferenceEquals(rhs.UnwrapAny(), null);
+                if (ReferenceEquals(rhs, null))
+                {
+                    return true;
+                }
+
+                return rhs.IsSome && ReferenceEquals(rhs.UnwrapAny(), null);
             }
 
             if (ReferenceEquals(rhs, null))
@@ -20,20 +24,42 @@ namespace Dvchevskii.Optional
                 return lhs.IsSome && ReferenceEquals(lhs.UnwrapAny(), null);
             }
 
-            if (lhs.IsSome != rhs.IsSome)
-            {
-                return false;
-            }
-
             if (lhs.IsNone)
             {
-                return true;
+                return rhs.IsNone;
+            }
+
+            if (rhs.IsNone)
+            {
+                return lhs.IsNone;
             }
 
             object lhsValue = lhs.UnwrapAny();
             object rhsValue = rhs.UnwrapAny();
 
             return EqualityComparer<object>.Default.Equals(lhsValue, rhsValue);
+        }
+
+        public bool Equals(Option lhs, object rhs)
+        {
+            if (rhs is Option rhsOption)
+            {
+                return Equals(lhs, rhsOption);
+            }
+
+            if (ReferenceEquals(lhs, null))
+            {
+                return ReferenceEquals(rhs, null);
+            }
+
+            if (lhs.IsNone)
+            {
+                return false;
+            }
+
+            object lhsValue = lhs.UnwrapAny();
+
+            return EqualityComparer<object>.Default.Equals(lhsValue, rhs);
         }
 
         public int GetHashCode(Option obj)

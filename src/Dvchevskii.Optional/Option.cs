@@ -5,13 +5,19 @@ using System.Runtime.CompilerServices;
 
 namespace Dvchevskii.Optional
 {
-    public abstract partial class Option : IEquatable<Option>
+    public abstract class Option : IEquatable<Option>
     {
         public abstract bool IsSome { get; }
         public abstract bool IsNone { get; }
         public abstract Type UnderlyingType { get; }
 
         private protected Option() { }
+
+        public static bool operator ==(Option lhs, Option rhs) =>
+            OptionEqualityComparer.Default.Equals(lhs, rhs);
+
+        public static bool operator !=(Option lhs, Option rhs) =>
+            !OptionEqualityComparer.Default.Equals(lhs, rhs);
 
         /// <summary>
         /// Create an Option which does not contain a value
@@ -28,8 +34,13 @@ namespace Dvchevskii.Optional
         /// <returns></returns>
         public static Option<T> Some<T>(T value) => Optional.Some<T>.From(value);
 
-        public abstract bool Equals(Option other);
+        internal abstract object UnwrapAny();
 
-        public abstract object UnwrapAny();
+        public virtual bool Equals(Option other) =>
+            OptionEqualityComparer.Default.Equals(this, other);
+
+        public override bool Equals(object obj) => OptionEqualityComparer.Default.Equals(this, obj);
+
+        public override int GetHashCode() => OptionEqualityComparer.Default.GetHashCode(this);
     }
 }
