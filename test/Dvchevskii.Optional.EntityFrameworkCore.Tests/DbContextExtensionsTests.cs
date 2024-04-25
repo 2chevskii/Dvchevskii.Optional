@@ -7,58 +7,74 @@ namespace Dvchevskii.Optional.EntityFrameworkCore.Tests;
 public class DbContextExtensionsTests
 {
     [TestMethod]
-    public void Test_FindOrNone()
+    public void Test_FindOrNone_Object_Empty_DbContext_Returns_None()
     {
-        TestDbContext dbContext = TestDbContext.Create();
-        Guid entId = Guid.NewGuid();
-        dbContext.Add(
-            new TestEntity
-            {
-                Id = entId,
-                Name = "Test name",
-                CreatedAt = DateTimeOffset.Now
-            }
-        );
-        dbContext.SaveChanges();
+        TestDbContext dbContext = TestDbContext.CreateEmpty();
 
-        dbContext.FindOrNone<TestEntity>(entId).IsSome.Should().BeTrue();
-        dbContext.FindOrNone(typeof(TestEntity), entId).IsSome.Should().BeTrue();
-        dbContext.FindOrNone<TestEntity>(Guid.NewGuid()).IsSome.Should().BeFalse();
-        dbContext.FindOrNone(typeof(TestEntity), Guid.NewGuid()).IsSome.Should().BeFalse();
+        Option<object>? option = dbContext.FindOrNone(typeof(TestEntity), 1);
+        option.IsNone.Should().BeTrue();
     }
 
     [TestMethod]
-    public async Task Test_FindOrNoneAsync()
+    public async Task Test_FindOrNoneAsync_Object_Empty_DbContext_Returns_None()
     {
-        TestDbContext dbContext = TestDbContext.Create();
-        Guid entId = Guid.NewGuid();
-        dbContext.Add(
-            new TestEntity
-            {
-                Id = entId,
-                Name = "Test name",
-                CreatedAt = DateTimeOffset.Now
-            }
-        );
-        await dbContext.SaveChangesAsync();
+        TestDbContext dbContext = TestDbContext.CreateEmpty();
 
-        Option<TestEntity> findOrNoneTResult = await dbContext.FindOrNoneAsync<TestEntity>(entId);
-        Option<object> findOrNoneResult = await dbContext.FindOrNoneAsync(
-            typeof(TestEntity),
-            entId
-        );
+        Option<object>? option = await dbContext.FindOrNoneAsync(typeof(TestEntity), 1);
+        option.IsNone.Should().BeTrue();
+    }
 
-        Option<TestEntity> findOrNoneTFalseResult = await dbContext.FindOrNoneAsync<TestEntity>(
-            Guid.NewGuid()
-        );
-        Option<object> findOrNoneFalseResult = await dbContext.FindOrNoneAsync(
-            typeof(TestEntity),
-            Guid.NewGuid()
-        );
+    [TestMethod]
+    public void Test_FindOrNone_Generic_Empty_DbContext_Returns_None()
+    {
+        TestDbContext dbContext = TestDbContext.CreateEmpty();
 
-        findOrNoneTResult.IsSome.Should().BeTrue();
-        findOrNoneResult.IsSome.Should().BeTrue();
-        findOrNoneTFalseResult.IsSome.Should().BeFalse();
-        findOrNoneFalseResult.IsSome.Should().BeFalse();
+        Option<TestEntity>? option = dbContext.FindOrNone<TestEntity>(1);
+        option.IsNone.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task Test_FindOrNoneAsync_Generic_Empty_DbContext_Returns_None()
+    {
+        TestDbContext dbContext = TestDbContext.CreateEmpty();
+
+        Option<TestEntity>? option = await dbContext.FindOrNoneAsync<TestEntity>(1);
+        option.IsNone.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void Test_FindOrNone_Object_Data_DbContext_Wrong_Key_Returns_None()
+    {
+        TestDbContext dbContext = TestDbContext.CreateWithData();
+
+        Option<object>? option = dbContext.FindOrNone(typeof(TestEntity), 999);
+        option.IsNone.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void Test_FindOrNone_Generic_Data_DbContext_Wrong_Key_Returns_None()
+    {
+        TestDbContext dbContext = TestDbContext.CreateWithData();
+
+        Option<TestEntity>? option = dbContext.FindOrNone<TestEntity>(999);
+        option.IsNone.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task Test_FindOrNoneAsync_Object_Data_DbContext_Wrong_Key_Returns_None()
+    {
+        TestDbContext dbContext = TestDbContext.CreateWithData();
+
+        Option<object>? option = await dbContext.FindOrNoneAsync(typeof(TestEntity), 999);
+        option.IsNone.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public async Task Test_FindOrNoneAsync_Generic_Data_DbContext_Wrong_Key_Returns_None()
+    {
+        TestDbContext dbContext = TestDbContext.CreateWithData();
+
+        Option<TestEntity>? option = await dbContext.FindOrNoneAsync<TestEntity>(999);
+        option.IsNone.Should().BeTrue();
     }
 }
