@@ -14,10 +14,15 @@ public class QueryableExtensionsTests
         EmptyDbContext.Entities.AsQueryable().FirstOrNone().IsNone.Should().BeTrue();
     }
 
-    [TestMethod]
-    public void Test_FirstOrNone_Predicate_Empty_DbContext_Returns_None()
+    [DataTestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    [DataRow(3)]
+    [DataRow(10)]
+    [DataRow(42)]
+    public void Test_FirstOrNone_Predicate_Empty_DbContext_Returns_None(int id)
     {
-        EmptyDbContext.Entities.AsQueryable().FirstOrNone(x => x.Id == 1).IsNone.Should().BeTrue();
+        EmptyDbContext.Entities.AsQueryable().FirstOrNone(x => x.Id == id).IsNone.Should().BeTrue();
     }
 
     [TestMethod]
@@ -27,10 +32,15 @@ public class QueryableExtensionsTests
         option.IsNone.Should().BeTrue();
     }
 
-    [TestMethod]
-    public async Task Test_FirstOrNoneAsync_Predicate_Empty_DbContext_Returns_None()
+    [DataTestMethod]
+    [DataRow(1)]
+    [DataRow(2)]
+    [DataRow(3)]
+    [DataRow(10)]
+    [DataRow(42)]
+    public async Task Test_FirstOrNoneAsync_Predicate_Empty_DbContext_Returns_None(int id)
     {
-        var option = await EmptyDbContext.Entities.AsQueryable().FirstOrNoneAsync(x => x.Id == 1);
+        var option = await EmptyDbContext.Entities.AsQueryable().FirstOrNoneAsync(x => x.Id == id);
         option.IsNone.Should().BeTrue();
     }
 
@@ -40,12 +50,35 @@ public class QueryableExtensionsTests
         DataDbContext.Entities.AsQueryable().FirstOrNone().IsSome.Should().BeTrue();
     }
 
-    [TestMethod]
-    public void Test_FirstOrNone_Predicate_Data_DbContext_Returns_Some()
+    [DataTestMethod]
+    [DataRow(1)]
+    [DataRow(42)]
+    public void Test_FirstOrNone_Predicate_Id_Data_DbContext_Returns_Some(int id)
     {
-        DataDbContext.Entities.AsQueryable().FirstOrNone(x => x.Id == 1).IsSome.Should().BeTrue();
-        DataDbContext.Entities.AsQueryable().FirstOrNone(x => x.Id == 1).Unwrap().Id.Should().Be(1);
-        DataDbContext.Entities.AsQueryable().FirstOrNone(x => x.Name == "entity42").IsSome.Should().BeTrue();
-        DataDbContext.Entities.AsQueryable().FirstOrNone(x => x.Name == "entity42").Unwrap().Name.Should().Be("entity42");
+        DataDbContext
+            .Entities.AsQueryable()
+            .FirstOrNone(x => x.Id == id)
+            .Should()
+            .Match<Option<TestEntity>>(x => x.IsSome)
+            .And.Subject.As<Option<TestEntity>>()
+            .Unwrap()
+            .Id.Should()
+            .Be(id);
+    }
+
+    [DataTestMethod]
+    [DataRow("entity1")]
+    [DataRow("entity42")]
+    public void Test_FirstOrNone_Predicate_Name_Data_DbContext_Returns_Some(string name)
+    {
+        DataDbContext
+            .Entities.AsQueryable()
+            .FirstOrNone(x => x.Name == name)
+            .Should()
+            .Match<Option<TestEntity>>(x => x.IsSome)
+            .And.Subject.As<Option<TestEntity>>()
+            .Unwrap()
+            .Name.Should()
+            .Be(name);
     }
 }
