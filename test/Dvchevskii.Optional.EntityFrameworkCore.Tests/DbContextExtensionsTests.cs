@@ -1,4 +1,3 @@
-using Dvchevskii.Optional.Async;
 using FluentAssertions;
 
 namespace Dvchevskii.Optional.EntityFrameworkCore.Tests;
