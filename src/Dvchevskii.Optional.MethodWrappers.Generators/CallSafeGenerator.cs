@@ -51,7 +51,7 @@ namespace Dvchevskii.Optional.MethodWrappers.Generators
         {
             string text =
                 $@"
-namespace global::Dvchevskii.Optional.MethodWrappers
+namespace Dvchevskii.Optional.MethodWrappers
 {{
     public static partial class MethodWrapperExtensions
     {{
