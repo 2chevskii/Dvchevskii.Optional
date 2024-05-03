@@ -14,9 +14,11 @@ jobs:
           - nuget_feed_name: nuget.org
             nuget_feed_url: https://api.nuget.org/v3/index.json
             nuget_api_key: NUGET_API_KEY
+            nuget_deploy_env_name: nuget-org
           - nuget_feed_name: github.com
             nuget_feed_url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
             nuget_api_key: GITHUB_TOKEN
+            nuget_deploy_env_name: github-nuget-feed
     steps:
       - name: ✅ Repository checkout
         uses: actions/checkout@v4
@@ -37,5 +39,5 @@ jobs:
           --nuget-feed-url '${{ matrix.nuget_feed_url }}'
           --nuget-api-key ${{ secrets[matrix.nuget_api_key] }}
     environment:
-      name: test
-      url: ${{ steps.push.outputs.package_url }}
+      name: ${{ matrix.nuget_deploy_env_name }}
+      url: ${{ steps.push.outputs.nuget_deploy_url }}
